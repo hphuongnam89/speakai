@@ -1,0 +1,40 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Kiểm tra thiết bị trước khi luyện{% endblock %}
+{% block content %}
+<section class="page-shell narrow-shell preflight-shell" id="device-preflight"
+  data-network-url="{{ network_probe_url }}"
+  data-complete-url="{{ preflight_complete_url }}"
+  data-start-url="{{ practice_start_url }}"
+  data-nonce="{{ setup.nonce }}">
+  <p class="eyebrow">BƯỚC BẮT BUỘC · {{ setup.level }} · {{ setup.question_count }} CÂU</p>
+  <h1>Kiểm tra thiết bị trước khi {% if setup.attempt_id %}tiếp tục{% else %}bắt đầu{% endif %}</h1>
+  <p class="lede">{{ setup.response_seconds }} giây cho mỗi câu. Hoàn tất kiểm tra micro và kết nối để tránh mất câu trả lời.</p>
+
+  <div class="preflight-steps">
+    <section class="preflight-card" aria-labelledby="mic-check-title">
+      <p class="step-index">01</p><h2 id="mic-check-title">Micro và bản ghi thử</h2>
+      <p>Cho phép truy cập micro, nói thử một câu, rồi phát lại để xác nhận giọng nghe rõ. Bản thử không được tải lên.</p>
+      <button class="button button-primary" type="button" data-mic-test>Bắt đầu kiểm tra micro</button>
+      <audio class="preflight-audio" controls hidden data-mic-preview></audio>
+      <label class="preflight-confirm" data-mic-confirm-wrap hidden><input type="checkbox" data-mic-confirm disabled> Tôi đã nghe bản thử và nghe rõ giọng mình.</label>
+      <p class="preflight-status" role="status" aria-live="polite" data-mic-status>Chưa kiểm tra</p>
+    </section>
+
+    <section class="preflight-card" aria-labelledby="network-check-title">
+      <p class="step-index">02</p><h2 id="network-check-title">Tốc độ kết nối</h2>
+      <p>Gửi và nhận gói thử 256 KB tới máy chủ. Demo chạy localhost chỉ đo đường truyền tới máy đang chạy app; khi triển khai online, phép đo sẽ tới máy chủ thi.</p>
+      <button class="button button-primary" type="button" data-network-test>Kiểm tra tốc độ mạng</button>
+      <p class="preflight-status" role="status" aria-live="polite" data-network-status>Chưa kiểm tra · yêu cầu tối thiểu 256 kbps, độ trễ không quá 2 giây.</p>
+    </section>
+  </div>
+
+  <form method="post" action="{{ practice_start_url }}" class="preflight-footer" data-start-form>
+    {% csrf_token %}<input type="hidden" name="nonce" value="{{ setup.nonce }}">
+    <button class="button button-primary button-wide" type="submit" disabled data-start-button>{% if setup.attempt_id %}Tiếp tục bài luyện{% else %}Bắt đầu bài luyện{% endif %}</button>
+    {% if setup.attempt_id %}<a class="back-link" href="{% url 'practice_detail' setup.attempt_id %}">← Quay lại bài luyện</a>{% else %}<a class="back-link" href="{% url 'practice_create' %}">← Quay lại chỉnh cấu hình</a>{% endif %}
+    <p class="preflight-status" role="status" aria-live="polite" data-gate-status>Hoàn tất cả hai bước để mở bài luyện.</p>
+  </form>
+</section>
+{% endblock %}
+{% block extra_scripts %}<script src="{% static 'preflight.js' %}?v=wav-20260926" defer></script>{% endblock %}

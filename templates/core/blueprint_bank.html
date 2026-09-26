@@ -1,0 +1,7 @@
+{% extends "core/base.html" %}
+{% block title %}Blueprint đề thi{% endblock %}
+{% block content %}
+<section class="dashboard-shell"><div class="dashboard-heading"><div><p class="eyebrow">CẤU HÌNH ĐỀ</p><h1>Blueprint theo học phần</h1><p class="lede">Cấu hình phần thi, cấp độ, thời gian, số câu và rubric nguồn; mỗi lượt lấy mẫu chỉ chọn đúng một chủ đề.</p></div><a class="button button-primary" href="{% url 'blueprint_create' %}">Tạo blueprint</a></div>
+  {% if blueprints %}<div class="course-list">{% for blueprint in blueprints %}<article class="course-card"><span class="course-number">{{ forloop.counter|stringformat:"02d" }}</span><div class="course-card-copy"><p class="course-kicker">{{ blueprint.course.code }} · {{ blueprint.versions.count }} phiên bản</p><h3><a href="{% url 'blueprint_detail' blueprint.pk %}">{{ blueprint.versions.last.title|default:"Blueprint chưa cấu hình" }}</a></h3><p>{% for version in blueprint.versions.all %}v{{ version.version }} · {{ version.get_status_display }}{% if not forloop.last %} / {% endif %}{% endfor %}</p></div><a class="text-link" href="{% url 'blueprint_detail' blueprint.pk %}">Mở <span aria-hidden="true">↗</span></a></article>{% endfor %}</div>{% else %}<div class="note-panel"><span class="note-mark" aria-hidden="true">i</span><div><p class="eyebrow">CHƯA CÓ CẤU HÌNH</p><h3>Chưa có blueprint.</h3><p>Blueprint cần trỏ tới rubric đã xuất bản và nguồn đề của đúng học phần. Không cấu hình môn chưa có tài liệu.</p></div></div>{% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "core/base.html" %}
+{% block title %}Bắt đầu luyện nói{% endblock %}
+{% block content %}
+<section class="welcome-shell">
+  <p class="eyebrow"><span class="status-dot" aria-hidden="true"></span> NỀN TẢNG ĐÁNH GIÁ NÓI</p>
+  <div class="welcome-grid">
+    <div class="welcome-copy">
+      <h1>Nói rõ ý.<br><span>Tiến bộ từng lượt.</span></h1>
+      <p class="lede">Luyện nói tiếng Anh theo học phần với câu hỏi AI tạo theo lựa chọn. Bài thi chính thức sẽ chỉ mở sau khi ngân hàng câu hỏi, rubric và cấu hình thi được giảng viên duyệt.</p>
+      <a class="button button-primary" href="{% url 'login' %}">Vào không gian học <span aria-hidden="true">↗</span></a>
+      <p class="fine-print">Bản demo nội bộ · Không dùng điểm luyện tập làm điểm học phần</p>
+    </div>
+    <aside class="course-preview" aria-label="Các học phần">
+      <div class="preview-heading"><span>HỌC PHẦN</span><span>TRÌNH ĐỘ THAM CHIẾU</span></div>
+      <div class="course-row course-row-ready">
+        <span class="course-number">01</span><span class="course-name">Giao tiếp 1</span><span class="level-chip">A1–A2</span>
+      </div>
+      <div class="course-row"><span class="course-number">02</span><span class="course-name">Giao tiếp 2</span><span class="course-state">Chờ tài liệu môn</span></div>
+      <div class="course-row"><span class="course-number">03</span><span class="course-name">Giao tiếp 3</span><span class="course-state">Chờ tài liệu môn</span></div>
+      <div class="course-row"><span class="course-number">04</span><span class="course-name">Giao tiếp 4</span><span class="course-state">Chờ tài liệu môn</span></div>
+      <p class="preview-note">Dải trình độ sẽ được cấu hình linh hoạt theo đề cương từng học phần.</p>
+    </aside>
+  </div>
+</section>
+<section class="workflow" aria-labelledby="workflow-title">
+  <div class="section-heading"><p class="eyebrow">CÁCH NỀN TẢNG HOẠT ĐỘNG</p><h2 id="workflow-title">Từ câu hỏi đến kết quả minh bạch.</h2></div>
+  <div class="workflow-steps">
+    <article><span class="step-index">01</span><h3>Giảng viên chuẩn bị</h3><p>Câu hỏi theo chủ đề, rubric theo phần thi và phiên bản được duyệt.</p></article>
+    <article><span class="step-index">02</span><h3>Sinh viên thực hiện</h3><p>Luyện riêng hoặc làm bài thi được giao; audio gắn với đúng câu trả lời.</p></article>
+    <article><span class="step-index">03</span><h3>AI đề xuất, người duyệt</h3><p>Điểm AI hiển thị tạm. Giảng viên nghe lại và công bố sau khi rà soát/phúc khảo.</p></article>
+  </div>
+</section>
+{% endblock %}

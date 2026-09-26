@@ -1,0 +1,26 @@
+{% extends "core/base.html" %}
+{% block title %}Không gian giảng viên{% endblock %}
+{% block content %}
+<section class="dashboard-shell">
+  <div class="dashboard-heading">
+    <div><p class="eyebrow">KHÔNG GIAN GIẢNG VIÊN</p><h1>Chào {{ request.user.get_short_name|default:request.user.username }}.</h1><p class="lede">Quản lý lớp được phân công, ngân hàng câu hỏi và lượt cần rà soát.</p></div>
+    <span class="account-badge">{{ request.user.username }}</span>
+  </div>
+  <div class="workspace-grid">
+    <section class="workspace-main" aria-labelledby="teacher-work-title">
+      <div class="section-heading compact"><div><p class="eyebrow">CÔNG VIỆC</p><h2 id="teacher-work-title">Khu vực giảng viên</h2></div></div>
+      <div class="course-list">
+        <article class="course-card"><span class="course-number">01</span><div class="course-card-copy"><p class="course-kicker">SOẠN THẢO VÀ DUYỆT</p><h3>Ngân hàng câu hỏi</h3><p>Tạo bản nháp, xem trước và gửi câu hỏi để giảng viên khác duyệt.</p></div><a class="text-link" href="{% url 'question_bank' %}">Mở ngân hàng <span aria-hidden="true">↗</span></a></article>
+        <article class="course-card"><span class="course-number">02</span><div class="course-card-copy"><p class="course-kicker">RUBRIC THEO PHẦN THI</p><h3>Tiêu chí và descriptor</h3><p>Soạn rubric theo section/task, cấp độ và tài liệu nguồn; bản xuất bản được khóa.</p></div><a class="text-link" href="{% url 'rubric_bank' %}">Mở thư viện <span aria-hidden="true">↗</span></a></article>
+        <article class="course-card"><span class="course-number">03</span><div class="course-card-copy"><p class="course-kicker">CẤU HÌNH ĐỀ</p><h3>Blueprint và topic sampler</h3><p>Kiểm tra pool đúng chủ đề, cấp độ, thời lượng và rubric trước khi mở thi.</p></div><a class="text-link" href="{% url 'blueprint_bank' %}">Mở blueprints <span aria-hidden="true">↗</span></a></article>
+        <article class="course-card"><span class="course-number">01</span><div class="course-card-copy"><p class="course-kicker">NGÂN HÀNG CÂU HỎI</p><h3>Chưa có dữ liệu được duyệt</h3><p>Chức năng quản lý câu hỏi sẽ mở sau khi hoàn tất mô hình dữ liệu và quy trình duyệt.</p></div><span class="state-pill">Chưa mở</span></article>
+        <article class="course-card course-card-muted"><span class="course-number">02</span><div class="course-card-copy"><p class="course-kicker">PHÚC KHẢO</p><h3>Chưa có bài cần rà soát</h3><p>Không có bài thi hay điểm nào được tạo sẵn trong bản demo này.</p></div><span class="state-pill">Trống</span></article>
+      </div>
+      {% if practice_attempts %}<section class="practice-history"><p class="eyebrow">BÀI LUYỆN CỦA HỌC PHẦN ĐƯỢC PHÂN CÔNG</p>
+        {% for attempt in practice_attempts %}<a class="history-row" href="{% url 'practice_review' attempt.pk %}"><span>{{ attempt.student.username }} · {{ attempt.course.name }} · {{ attempt.cefr_level }} · {{ attempt.topic }}</span><span>{{ attempt.get_status_display }} · {{ attempt.answers.count }}/{{ attempt.question_count }} câu →</span></a>{% endfor %}
+      </section>{% endif %}
+    </section>
+    <aside class="workspace-aside"><div class="note-panel"><span class="note-mark" aria-hidden="true">i</span><div><p class="eyebrow">QUYỀN TRUY CẬP</p><h3>Theo lớp được phân công.</h3><p>Khi có dữ liệu lớp, quyền xem bài và audio sẽ được giới hạn theo phân công ở phía máy chủ.</p></div></div></aside>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,92 @@
+name: ai-speaking-demo
+
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?Copy .env.example to .env first}
+      POSTGRES_USER: ${POSTGRES_USER:?Copy .env.example to .env first}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set a local password in .env}
+    ports:
+      - "127.0.0.1:${HOST_DB_PORT:-55433}:5432"
+    volumes:
+      - speaking_demo_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  web:
+    build: .
+    environment:
+      DJANGO_DEBUG: ${DJANGO_DEBUG:-true}
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:?Set DJANGO_SECRET_KEY in .env}
+      POSTGRES_DB: ${POSTGRES_DB:?Copy .env.example to .env first}
+      POSTGRES_USER: ${POSTGRES_USER:?Copy .env.example to .env first}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set a local password in .env}
+      DB_HOST: db
+      DB_PORT: "5432"
+      CELERY_BROKER_URL: redis://redis:6379/0
+      LOCAL_AI_BASE_URL: ${LOCAL_AI_BASE_URL:-http://host.docker.internal:11434}
+      LOCAL_AI_MODEL: ${LOCAL_AI_MODEL:-ornith1.5:9b}
+      LOCAL_AI_TIMEOUT_SECONDS: ${LOCAL_AI_TIMEOUT_SECONDS:-150}
+      WHISPER_MODEL: ${WHISPER_MODEL:-small}
+      WHISPER_DEVICE: ${WHISPER_DEVICE:-cpu}
+      WHISPER_COMPUTE_TYPE: ${WHISPER_COMPUTE_TYPE:-int8}
+      HF_HOME: /app/.cache/huggingface
+      DJANGO_ALLOWED_HOSTS: 127.0.0.1,localhost,web
+      DEMO_STUDENT_PASSWORD: ${DEMO_STUDENT_PASSWORD:-}
+      DEMO_TEACHER_PASSWORD: ${DEMO_TEACHER_PASSWORD:-}
+      DEMO_ADMIN_PASSWORD: ${DEMO_ADMIN_PASSWORD:-}
+    command: sh -c "python manage.py migrate --noinput && python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "127.0.0.1:${WEB_PORT:-18080}:8000"
+    volumes:
+      - speaking_demo_media:/app/media
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  worker:
+    build: .
+    environment:
+      DJANGO_DEBUG: ${DJANGO_DEBUG:-true}
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:?Set DJANGO_SECRET_KEY in .env}
+      POSTGRES_DB: ${POSTGRES_DB:?Copy .env.example to .env first}
+      POSTGRES_USER: ${POSTGRES_USER:?Copy .env.example to .env first}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set a local password in .env}
+      DB_HOST: db
+      DB_PORT: "5432"
+      CELERY_BROKER_URL: redis://redis:6379/0
+      LOCAL_AI_BASE_URL: ${LOCAL_AI_BASE_URL:-http://host.docker.internal:11434}
+      LOCAL_AI_MODEL: ${LOCAL_AI_MODEL:-ornith1.5:9b}
+      LOCAL_AI_TIMEOUT_SECONDS: ${LOCAL_AI_TIMEOUT_SECONDS:-150}
+      WHISPER_MODEL: ${WHISPER_MODEL:-small}
+      WHISPER_DEVICE: ${WHISPER_DEVICE:-cpu}
+      WHISPER_COMPUTE_TYPE: ${WHISPER_COMPUTE_TYPE:-int8}
+      HF_HOME: /app/.cache/huggingface
+    command: celery -A config worker --loglevel=INFO --concurrency=1
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - speaking_demo_media:/app/media
+      - speaking_demo_models:/app/.cache
+
+volumes:
+  speaking_demo_db:
+  speaking_demo_media:
+  speaking_demo_models:

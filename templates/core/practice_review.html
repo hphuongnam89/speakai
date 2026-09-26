@@ -1,0 +1,13 @@
+{% extends "core/base.html" %}
+{% block title %}Nghe lại bài luyện{% endblock %}
+{% block content %}
+<section class="page-shell">
+  <div class="practice-header"><div><p class="eyebrow">RÀ SOÁT BÀI LUYỆN · {{ attempt.get_status_display|upper }}</p><h1>{{ attempt.student.username }} · {{ attempt.course.name }}</h1><p class="lede">{{ attempt.cefr_level }} · {{ attempt.topic }} · {{ attempt.created_at|date:"d/m/Y H:i" }}</p></div><a class="button button-quiet" href="{% url 'dashboard' %}">Về trang công việc</a></div>
+  <p class="practice-disclaimer message">AI chấm sơ bộ: {% if attempt.ai_score != None %}<strong>{{ attempt.ai_score }}/100</strong>{% else %}đang chờ kết quả{% endif %}. Giảng viên phải nghe lại audio và duyệt điểm cuối.</p>
+  {% for item in items %}<article class="question-version practice-question"><p class="eyebrow">CÂU {{ item.index }}</p><h2>{{ item.question.prompt }}</h2>
+    {% if item.answer %}<p>Thời lượng ghi âm: {{ item.answer.duration_seconds }} giây</p><audio controls preload="none" src="{% url 'practice_answer_audio' item.answer.pk %}">Trình duyệt không hỗ trợ phát audio.</audio>{% else %}<p class="helper-text">Sinh viên chưa lưu bản ghi câu này.</p>{% endif %}
+    {% for review in attempt.ai_result.per_question %}{% if review.question_index == item.index %}<div class="answer-feedback"><h3>AI nháp: {{ review.score }}/100</h3><p>{{ review.feedback }}</p>{% if review.strengths %}<strong>Ưu điểm</strong><ul>{% for value in review.strengths %}<li>{{ value }}</li>{% endfor %}</ul>{% endif %}{% if review.weaknesses %}<strong>Cần cải thiện</strong><ul>{% for value in review.weaknesses %}<li>{{ value }}</li>{% endfor %}</ul>{% endif %}</div>{% endif %}{% endfor %}
+  </article>{% endfor %}
+  <form method="post" class="question-form score-form">{% csrf_token %}<h2>Duyệt điểm cuối</h2>{{ form.non_field_errors }}<label for="id_score">{{ form.score.label }}</label>{{ form.score }}{{ form.score.errors }}<label for="id_feedback">{{ form.feedback.label }}</label>{{ form.feedback }}{{ form.feedback.errors }}<button class="button button-primary" type="submit">Duyệt và công bố điểm</button></form>
+</section>
+{% endblock %}

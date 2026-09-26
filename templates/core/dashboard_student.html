@@ -1,0 +1,44 @@
+{% extends "core/base.html" %}
+{% block title %}Không gian sinh viên{% endblock %}
+{% block content %}
+<section class="dashboard-shell">
+  <div class="dashboard-heading">
+    <div><p class="eyebrow">KHÔNG GIAN SINH VIÊN</p><h1>Chào {{ request.user.get_short_name|default:request.user.username }}.</h1><p class="lede">Tạo bài luyện nói bằng Local AI và ghi âm ngay trên thiết bị của bạn.</p></div>
+    <span class="account-badge">{{ request.user.username }}</span>
+  </div>
+  <div class="workspace-grid">
+    <section class="workspace-main" aria-labelledby="course-title">
+      <div class="section-heading compact"><div><p class="eyebrow">HỌC PHẦN ĐƯỢC MỞ</p><h2 id="course-title">Bắt đầu luyện nói</h2></div></div>
+      {% if courses %}
+        <div class="course-list">
+          {% for course in courses %}
+          <article class="course-card">
+            <span class="course-number">{{ forloop.counter|stringformat:"02d" }}</span>
+            <div class="course-card-copy"><p class="course-kicker">LUYỆN TẬP CÁ NHÂN · AI LOCAL</p><h3>{{ course.name }}</h3><p>Chọn trình độ, chủ đề, số câu và thời lượng. Câu hỏi AI tạo chỉ dùng để luyện tập, chưa được giảng viên xác nhận.</p></div>
+            <a class="button" href="{% url 'practice_create' %}">Tạo bài luyện</a>
+          </article>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="form-error">Tài khoản chưa được ghi danh học phần nào. Hãy liên hệ giảng viên hoặc quản trị viên mở học phần demo.</div>
+      {% endif %}
+      {% if attempts %}
+      <details class="practice-history">
+        <summary><span class="eyebrow">LỊCH SỬ LUYỆN TẬP</span><span class="history-count">{{ attempts_total }} lượt · xem 3 gần nhất</span></summary>
+        <div class="history-list">
+          {% for attempt in attempts %}
+            <a class="history-row" href="{% url 'practice_detail' attempt.pk %}">
+              <span>{{ attempt.course.name }} · {{ attempt.cefr_level }} · {{ attempt.topic|default:"Chủ đề tự do" }}<small>{{ attempt.created_at|date:"d/m/Y · H:i" }}</small></span>
+              <span>{{ attempt.get_status_display }} →</span>
+            </a>
+          {% endfor %}
+        </div>
+      </details>
+      {% endif %}
+    </section>
+    <aside class="workspace-aside">
+      <div class="note-panel"><span class="note-mark" aria-hidden="true">i</span><div><p class="eyebrow">LƯU Ý</p><h3>Bài luyện AI, chưa phải bài thi chính thức.</h3><p>Audio được lưu trong vùng dữ liệu demo trên máy chủ local. AI chấm sơ bộ; điểm cuối chỉ hiện sau khi giảng viên duyệt.</p></div></div>
+    </aside>
+  </div>
+</section>
+{% endblock %}

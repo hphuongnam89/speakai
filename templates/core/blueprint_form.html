@@ -1,0 +1,13 @@
+{% extends "core/base.html" %}
+{% block title %}{% if edit_version %}Sửa blueprint nháp{% else %}Tạo blueprint{% endif %}{% endblock %}
+{% block content %}
+<section class="dashboard-shell narrow-shell"><p class="eyebrow">BLUEPRINT CÓ VERSION</p><h1>{% if edit_version %}Sửa {{ edit_version.title }} · v{{ edit_version.version }}{% else %}Tạo blueprint nháp{% endif %}</h1><p class="lede">Mỗi blueprint dùng một nguồn môn học. Mỗi slot nêu số lượng, dải CEFR, ngôn ngữ, thời lượng và rubric đã xuất bản.</p>
+  {% if rubric_options %}<details class="note-panel rubric-options"><summary>Rubric có thể gắn (dùng ID trong JSON)</summary><ul>{% for rubric in rubric_options %}<li>ID {{ rubric.pk }} · {{ rubric.title }} · {{ rubric.section_name }} / {{ rubric.task_type }} · {{ rubric.target_level_min }}{% if rubric.target_level_max %}–{{ rubric.target_level_max }}{% endif %}</li>{% endfor %}</ul></details>{% else %}<p class="form-error">Chưa có rubric đã xuất bản trong học phần được chọn.</p>{% endif %}
+  <form method="post" class="question-form">{% csrf_token %}
+    {% if form.non_field_errors %}<div class="form-error">{{ form.non_field_errors }}</div>{% endif %}
+    {% if not edit_version %}<label for="course">Học phần</label><select id="course" name="course" required>{% for item in courses %}<option value="{{ item.pk }}"{% if selected_course.pk == item.pk %} selected{% endif %}>{{ item.code }} — {{ item.name }}</option>{% endfor %}</select>{% if not courses %}<p class="form-error">Bạn chưa được phân công học phần đang hoạt động.</p>{% endif %}{% endif %}
+    {{ form.as_p }}
+    <div class="form-actions"><button class="button button-primary" type="submit">Lưu blueprint nháp</button><a class="text-link" href="{% if edit_version %}{% url 'blueprint_detail' edit_version.blueprint_id %}{% else %}{% url 'blueprint_bank' %}{% endif %}">Hủy</a></div>
+  </form>
+</section>
+{% endblock %}

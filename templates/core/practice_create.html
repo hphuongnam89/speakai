@@ -1,0 +1,17 @@
+{% extends "core/base.html" %}
+{% block title %}Tạo bài luyện bằng AI{% endblock %}
+{% block content %}
+<section class="page-shell narrow-shell">
+  <p class="eyebrow">LUYỆN NÓI · LOCAL AI</p><h1>Tạo bài luyện của bạn</h1>
+  <p class="lede">Ollama trên MacBook tạo câu hỏi theo lựa chọn. Đây là nội dung thực hành tự sinh, không phải đề chính thức từ ngân hàng câu hỏi.</p>
+  {% if generation_error %}<div class="form-error" role="alert">{{ generation_error }}</div>{% endif %}
+  {% if not has_courses %}<div class="form-error">Chưa có học phần được ghi danh. Quản trị viên cần chạy cấu hình tài khoản demo trước.</div>{% else %}
+  <form method="post" class="question-form" id="practice-create-form">
+    {% csrf_token %}{{ form.as_p }}
+    <p class="helper-text">Để trống chủ đề nếu muốn AI tự chọn. Mỗi bài tối đa 8 câu; thời gian trả lời mỗi câu từ 15 đến 240 giây.</p>
+    <button class="button button-primary" type="submit" id="practice-create-button">Tiếp tục kiểm tra thiết bị</button>
+  </form>
+  {% endif %}
+  <a class="back-link" href="{% url 'dashboard_student' %}">← Về không gian sinh viên</a>
+</section>
+{% endblock %}

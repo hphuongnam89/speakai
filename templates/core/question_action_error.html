@@ -1,0 +1,3 @@
+{% extends "core/base.html" %}
+{% block title %}Không thể thực hiện{% endblock %}
+{% block content %}<section class="dashboard-shell narrow-shell"><p class="eyebrow">NGÂN HÀNG CÂU HỎI</p><h1>Chưa thể thực hiện thao tác</h1><div class="form-error">{{ error }}</div><a class="text-link" href="{% url 'question_bank' %}">Về ngân hàng câu hỏi</a></section>{% endblock %}

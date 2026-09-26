@@ -1,0 +1,8 @@
+{% extends "core/base.html" %}
+{% block title %}Thư viện rubric{% endblock %}
+{% block content %}
+<section class="dashboard-shell">
+  <div class="dashboard-heading"><div><p class="eyebrow">RUBRIC THEO HỌC PHẦN</p><h1>Thư viện rubric</h1><p class="lede">Mỗi rubric gắn với một phần thi và dạng nhiệm vụ; bản xuất bản không thể sửa.</p></div><a class="button button-primary" href="{% url 'rubric_create' %}">Tạo rubric</a></div>
+  {% if rubrics %}<div class="course-list">{% for rubric in rubrics %}<article class="course-card"><span class="course-number">{{ forloop.counter|stringformat:"02d" }}</span><div class="course-card-copy"><p class="course-kicker">{{ rubric.course.code }} · {{ rubric.versions.count }} phiên bản</p><h3><a href="{% url 'rubric_detail' rubric.pk %}">{{ rubric.versions.last.title|default:"Rubric chưa có phiên bản" }}</a></h3><p>{% for version in rubric.versions.all %}v{{ version.version }} · {{ version.get_status_display }}{% if not forloop.last %} / {% endif %}{% endfor %}</p></div><a class="text-link" href="{% url 'rubric_detail' rubric.pk %}">Mở <span aria-hidden="true">↗</span></a></article>{% endfor %}</div>{% else %}<div class="note-panel"><span class="note-mark" aria-hidden="true">i</span><div><p class="eyebrow">CHƯA CÓ RUBRIC</p><h3>Chưa có rubric được nhập.</h3><p>Chỉ tạo nội dung sau khi đối chiếu đáp án/rubric nguồn; app không tự sinh descriptor, trọng số hay ngưỡng điểm.</p></div></div>{% endif %}
+</section>
+{% endblock %}
