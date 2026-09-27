@@ -1,0 +1,17 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Kiểm tra thiết bị trước kỳ thi{% endblock %}
+{% block content %}
+<section class="page-shell narrow-shell preflight-shell" id="device-preflight"
+  data-network-url="{{ network_probe_url }}" data-complete-url="{{ preflight_complete_url }}" data-start-url="{{ practice_start_url }}" data-nonce="{{ setup.nonce }}">
+  <p class="eyebrow">BƯỚC BẮT BUỘC · KỲ THI CHÍNH THỨC · {{ setup.question_count }} CÂU</p>
+  <h1>Kiểm tra thiết bị trước khi thi</h1>
+  <p class="lede">Mỗi câu có tối đa {{ setup.response_seconds }} giây theo cấu hình đề. Hoàn tất kiểm tra micro và kết nối trước khi bắt đầu.</p>
+  <div class="preflight-steps">
+    <section class="preflight-card" aria-labelledby="mic-check-title"><p class="step-index">01</p><h2 id="mic-check-title">Micro và bản ghi thử</h2><p>Cho phép truy cập micro, nói thử một câu, phát lại toàn bộ rồi xác nhận giọng nghe rõ. Bản thử không được tải lên.</p><button class="button button-primary" type="button" data-mic-test>Bắt đầu kiểm tra micro</button><audio class="preflight-audio" controls hidden data-mic-preview></audio><label class="preflight-confirm" data-mic-confirm-wrap hidden><input type="checkbox" data-mic-confirm disabled> Tôi đã nghe bản thử và nghe rõ giọng mình.</label><p class="preflight-status" role="status" aria-live="polite" data-mic-status>Chưa kiểm tra</p></section>
+    <section class="preflight-card" aria-labelledby="network-check-title"><p class="step-index">02</p><h2 id="network-check-title">Tốc độ kết nối</h2><p>Kiểm tra đường truyền tới máy chủ thi. Yêu cầu tối thiểu 256 kbps và độ trễ không quá 2 giây.</p><button class="button button-primary" type="button" data-network-test>Kiểm tra tốc độ mạng</button><p class="preflight-status" role="status" aria-live="polite" data-network-status>Chưa kiểm tra</p></section>
+  </div>
+  <form method="post" action="{{ practice_start_url }}" class="preflight-footer" data-start-form>{% csrf_token %}<input type="hidden" name="nonce" value="{{ setup.nonce }}"><button class="button button-primary button-wide" type="submit" disabled data-start-button>Bắt đầu kỳ thi</button><a class="back-link" href="{% url 'dashboard_student' %}">← Quay lại dashboard</a><p class="preflight-status" role="status" aria-live="polite" data-gate-status>Hoàn tất cả hai bước để mở kỳ thi.</p></form>
+</section>
+{% endblock %}
+{% block extra_scripts %}<script src="{% static 'preflight.js' %}?v=wav-20260926" defer></script>{% endblock %}

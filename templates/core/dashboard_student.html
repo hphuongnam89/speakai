@@ -15,12 +15,18 @@
           <article class="course-card">
             <span class="course-number">{{ forloop.counter|stringformat:"02d" }}</span>
             <div class="course-card-copy"><p class="course-kicker">LUYỆN TẬP CÁ NHÂN · AI LOCAL</p><h3>{{ course.name }}</h3><p>Chọn trình độ, chủ đề, số câu và thời lượng. Câu hỏi AI tạo chỉ dùng để luyện tập, chưa được giảng viên xác nhận.</p></div>
-            <a class="button" href="{% url 'practice_create' %}">Tạo bài luyện</a>
+            <a class="button button-primary" href="{% url 'practice_create' %}">Tạo bài luyện</a>
           </article>
           {% endfor %}
         </div>
       {% else %}
         <div class="form-error">Tài khoản chưa được ghi danh học phần nào. Hãy liên hệ giảng viên hoặc quản trị viên mở học phần demo.</div>
+      {% endif %}
+      {% if official_versions %}
+      <section class="official-exams" aria-labelledby="official-title">
+        <div class="section-heading compact"><div><p class="eyebrow">ĐÁNH GIÁ CHÍNH THỨC</p><h2 id="official-title">Kỳ thi đang mở</h2></div></div>
+        <div class="course-list">{% for version in official_versions %}<article class="course-card"><div class="course-card-copy"><p class="course-kicker">{{ version.blueprint.course.code }} · BLUEPRINT V{{ version.version }}</p><h3>{{ version.title }}</h3><p>{{ version.blueprint.course.name }} · đề được cấp từ snapshot đã duyệt.</p></div><form method="post" action="{% url 'exam_start' version.pk %}">{% csrf_token %}<input type="hidden" name="topic" value="official"><button class="button button-primary" type="submit">Bắt đầu kỳ thi</button></form></article>{% endfor %}</div>
+      </section>
       {% endif %}
       {% if attempts %}
       <details class="practice-history">

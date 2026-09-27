@@ -1,0 +1,2319 @@
+{
+  "schema_version": "paper-online-draft-v1",
+  "status": "draft_only",
+  "source_policy": "No item is approved by this file. Every item requires independent teacher review.",
+  "items": [
+    {
+      "language": "en",
+      "task_type": "self_introduction",
+      "topic": "Introduction",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Introduce yourself. Include your name, your study or work, and one regular activity or interest.",
+      "candidate_instructions": "Speak individually for up to 45 seconds. You may use the three prompts as a guide; do not read a prepared script.",
+      "prep_seconds": 15,
+      "response_seconds": 45,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Adapted from Task 1A “Introduce yourself”. The paper gives no timing; 15/45 seconds are online pilot settings.",
+      "required_points": [
+        "name",
+        "study_or_work",
+        "activity_or_interest"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_a",
+        "response_mode": "individual",
+        "expected_evidence": [
+          "three_prompt_points"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Free Time & Hobbies",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Describe one activity you do in your free time and say how often you do it.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'What do you do in your free time?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "What do you do in your free time?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Free Time & Hobbies",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Tell us about one programme or type of video you watch, or explain why you do not watch TV.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'Do you like watching TV?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "Do you like watching TV?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Free Time & Hobbies",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Tell us about a sport you play or watch, or explain why you do not play sports.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'Do you play sports?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "Do you play sports?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Free Time & Hobbies",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "What do you usually do on weekends? Give one example and say who you do it with.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'What do you do at the weekend?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "What do you do at the weekend?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Free Time & Hobbies",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Do you prefer staying at home or going out? Give one reason and one example.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'Do you prefer staying at home or going out?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "Do you prefer staying at home or going out?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Food & Drinks",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "What is your favourite food? Describe it briefly and say when you usually eat it.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'What is your favourite food?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "What is your favourite food?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Food & Drinks",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "What do you usually eat for breakfast? Give two examples or describe a typical breakfast.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'What do you usually eat for breakfast?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "What do you usually eat for breakfast?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Food & Drinks",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Do you like fast food? Give one example and one reason for your answer.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'Do you like fast food?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "Do you like fast food?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Food & Drinks",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "What is your favourite drink? Say when you usually have it and why you like it.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'What is your favorite drink?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "What is your favorite drink?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Food & Drinks",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Can you cook? Name one dish you can cook and describe one step.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'Can you cook? What can you cook?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "Can you cook? What can you cook?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Home & Neighborhood",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Do you live in a house or an apartment? Describe one feature of your home.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'Where do you live (house or apartment)?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "Where do you live (house or apartment)?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Home & Neighborhood",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "How many rooms are there in your home? Name your favourite room and give one reason.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'How many rooms are there in your home?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "How many rooms are there in your home?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Home & Neighborhood",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "What is your favourite room at home? Describe two things in it.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'What is your favorite room?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "What is your favorite room?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Home & Neighborhood",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Is your neighbourhood quiet or busy? Give one example of what you can see or hear there.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'Is your neighborhood quiet or busy?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "Is your neighborhood quiet or busy?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Home & Neighborhood",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Is there a supermarket near your home? Say where it is and how you usually get there.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'Is there a supermarket near your home?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "Is there a supermarket near your home?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Transportation",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "How do you usually travel to school or work? Give one reason for your choice.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'How do you go to school / work?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "How do you go to school / work?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Transportation",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "How long does your usual journey to school or work take? Say when you travel.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'How long does it take?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "How long does it take?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Transportation",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Which transport do you use most often? Give one advantage or disadvantage.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'Do you use a bike, motorbike, bus, or car?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "Do you use a bike, motorbike, bus, or car?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Transportation",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Do you like travelling by bus? Give one reason and one example from a usual journey.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'Do you like traveling by bus?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "Do you like traveling by bus?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Transportation",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "How often do you walk for transport or exercise? Say where you usually walk.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'How often do you walk?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "How often do you walk?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 1",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "cat",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (15).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "1",
+        "syllable_group": "one",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 1",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "manager",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (15).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "1",
+        "syllable_group": "two",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 1",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "education",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (15).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "1",
+        "syllable_group": "three_plus",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 1",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "police",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (15).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "1",
+        "syllable_group": "two",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 1",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "information",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (15).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "1",
+        "syllable_group": "three_plus",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 1",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "assistant",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (15).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "1",
+        "syllable_group": "three_plus",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 1",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "opportunity",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (15).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "1",
+        "syllable_group": "three_plus",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 1",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "environmental",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (15).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "1",
+        "syllable_group": "three_plus",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 1",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "cultural",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (15).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "1",
+        "syllable_group": "three_plus",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 1",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "communication",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (15).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "1",
+        "syllable_group": "three_plus",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 1",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Practice makes pronunciation better.",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (15).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "1",
+        "sentence_type": "declarative",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 1",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "He answered the question correctly.",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (15).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "1",
+        "sentence_type": "declarative",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 1",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "This topic is very interesting.",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (15).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "1",
+        "sentence_type": "declarative",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 1",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "They missed the last bus.",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (15).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "1",
+        "sentence_type": "declarative",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 1",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "She sounded confident.",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (15).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "1",
+        "sentence_type": "declarative",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 1",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Are you nervous about the test?",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (15).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "1",
+        "sentence_type": "yes_no",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 1",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Have you practiced enough?",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (15).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "1",
+        "sentence_type": "yes_no",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 1",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "What should we do next?",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (15).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "1",
+        "sentence_type": "wh",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 1",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "How do you pronounce this word?",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (15).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "1",
+        "sentence_type": "wh",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 1",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Could I ask you something?",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (15).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "1",
+        "sentence_type": "yes_no",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_passage",
+      "topic": "Pronunciation Paper 1",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Listening to native speakers is very beneficial for learners. It helps them notice stress and intonation patterns. Repeating after the speaker improves accuracy. Recording their own voice can also help. These methods lead to better pronunciation. Learners can improve when they practise regularly.",
+      "candidate_instructions": "Read the passage aloud once. Maintain clear phrasing and natural pacing; no model audio is played.",
+      "prep_seconds": 30,
+      "response_seconds": 60,
+      "source_reference": "đề thi giấy/Preparing name… (15).pdf",
+      "source_notes": "Verbatim passage from paper exam; online unit records one passage for alignment and fluency analysis. The added sentence is an online length-normalization proposal and must be approved separately; it is not verbatim paper content.",
+      "criterion_refs": [
+        "target_sounds",
+        "stress_intonation",
+        "fluency",
+        "phrasing",
+        "content_completeness"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_passages",
+        "paper_set": "1",
+        "word_count": 43,
+        "word_count_range": [
+          40,
+          60
+        ],
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_passage",
+      "topic": "Pronunciation Paper 1",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "On Sunday afternoon, the park was full of people. Children were playing games near the lake. Parents sat on benches and talked. Some people were jogging along the paths. The atmosphere was lively and cheerful. They enjoyed the afternoon together.",
+      "candidate_instructions": "Read the passage aloud once. Maintain clear phrasing and natural pacing; no model audio is played.",
+      "prep_seconds": 30,
+      "response_seconds": 60,
+      "source_reference": "đề thi giấy/Preparing name… (15).pdf",
+      "source_notes": "Verbatim passage from paper exam; online unit records one passage for alignment and fluency analysis. The added sentence is an online length-normalization proposal and must be approved separately; it is not verbatim paper content.",
+      "criterion_refs": [
+        "target_sounds",
+        "stress_intonation",
+        "fluency",
+        "phrasing",
+        "content_completeness"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_passages",
+        "paper_set": "1",
+        "word_count": 40,
+        "word_count_range": [
+          40,
+          60
+        ],
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 2",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "book",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (16).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "2",
+        "syllable_group": "one",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 2",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "dangerous",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (16).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "2",
+        "syllable_group": "three_plus",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 2",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "communication",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (16).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "2",
+        "syllable_group": "three_plus",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 2",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "happiness",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (16).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "2",
+        "syllable_group": "two",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 2",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "improve",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (16).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "2",
+        "syllable_group": "two",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 2",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "example",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (16).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "2",
+        "syllable_group": "two",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 2",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "personality",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (16).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "2",
+        "syllable_group": "three_plus",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 2",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "environment",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (16).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "2",
+        "syllable_group": "three_plus",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 2",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "photograph",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (16).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "2",
+        "syllable_group": "three_plus",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 2",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "television",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (16).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "2",
+        "syllable_group": "three_plus",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 2",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Pronunciation needs regular practice.",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (16).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "2",
+        "sentence_type": "declarative",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 2",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "She spoke very confidently.",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (16).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "2",
+        "sentence_type": "declarative",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 2",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "The test was not too difficult.",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (16).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "2",
+        "sentence_type": "declarative",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 2",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "We learned many new sounds.",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (16).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "2",
+        "sentence_type": "declarative",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 2",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "He corrected his mistake quickly.",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (16).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "2",
+        "sentence_type": "declarative",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 2",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Is English pronunciation difficult?",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (16).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "2",
+        "sentence_type": "yes_no",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 2",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Do you practice every day?",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (16).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "2",
+        "sentence_type": "yes_no",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 2",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "What did the teacher say?",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (16).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "2",
+        "sentence_type": "wh",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 2",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Why do we use intonation?",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (16).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "2",
+        "sentence_type": "wh",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 2",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Can you read this sentence aloud?",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (16).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "2",
+        "sentence_type": "yes_no",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_passage",
+      "topic": "Pronunciation Paper 2",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Many students worry about making pronunciation mistakes. However, mistakes are a normal part of learning. Speaking regularly helps reduce fear. Feedback from teachers is very valuable. Confidence grows with continuous practice. Regular practice helps learners speak with more confidence each day.",
+      "candidate_instructions": "Read the passage aloud once. Maintain clear phrasing and natural pacing; no model audio is played.",
+      "prep_seconds": 30,
+      "response_seconds": 60,
+      "source_reference": "đề thi giấy/Preparing name… (16).pdf",
+      "source_notes": "Verbatim passage from paper exam; online unit records one passage for alignment and fluency analysis. The added sentence is an online length-normalization proposal and must be approved separately; it is not verbatim paper content.",
+      "criterion_refs": [
+        "target_sounds",
+        "stress_intonation",
+        "fluency",
+        "phrasing",
+        "content_completeness"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_passages",
+        "paper_set": "2",
+        "word_count": 41,
+        "word_count_range": [
+          40,
+          60
+        ],
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_passage",
+      "topic": "Pronunciation Paper 2",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Every morning, she wakes up at six o’clock. She prepares breakfast while listening to music. After that, she goes for a short walk. This routine helps her feel calm and focused. She starts her day with a positive mood. She feels ready to work.",
+      "candidate_instructions": "Read the passage aloud once. Maintain clear phrasing and natural pacing; no model audio is played.",
+      "prep_seconds": 30,
+      "response_seconds": 60,
+      "source_reference": "đề thi giấy/Preparing name… (16).pdf",
+      "source_notes": "Verbatim passage from paper exam; online unit records one passage for alignment and fluency analysis. The added sentence is an online length-normalization proposal and must be approved separately; it is not verbatim paper content.",
+      "criterion_refs": [
+        "target_sounds",
+        "stress_intonation",
+        "fluency",
+        "phrasing",
+        "content_completeness"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_passages",
+        "paper_set": "2",
+        "word_count": 44,
+        "word_count_range": [
+          40,
+          60
+        ],
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 3",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "block",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (17).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "3",
+        "syllable_group": "one",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 3",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "arrive",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (17).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "3",
+        "syllable_group": "two",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 3",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "beautiful",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (17).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "3",
+        "syllable_group": "two",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 3",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "pronunciation",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (17).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "3",
+        "syllable_group": "three_plus",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 3",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "confident",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (17).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "3",
+        "syllable_group": "two",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 3",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "decision",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (17).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "3",
+        "syllable_group": "three_plus",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 3",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "improvement",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (17).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "3",
+        "syllable_group": "three_plus",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 3",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "engineer",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (17).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "3",
+        "syllable_group": "two",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 3",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "responsibility",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (17).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "3",
+        "syllable_group": "three_plus",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_word",
+      "topic": "Pronunciation Paper 3",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "electricity",
+      "candidate_instructions": "Read the word once at a natural pace and place the main stress correctly.",
+      "prep_seconds": 2,
+      "response_seconds": 10,
+      "source_reference": "đề thi giấy/Preparing name… (17).pdf",
+      "source_notes": "Verbatim word from paper exam; online unit is one short recording per item for acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "word_stress"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_words",
+        "paper_set": "3",
+        "syllable_group": "three_plus",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 3",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "This room is very quiet.",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (17).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "3",
+        "sentence_type": "declarative",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 3",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "She passed the exam successfully.",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (17).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "3",
+        "sentence_type": "declarative",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 3",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "We need more time to practice.",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (17).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "3",
+        "sentence_type": "declarative",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 3",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "He didn’t agree with the idea.",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (17).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "3",
+        "sentence_type": "declarative",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 3",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "The lesson ended early.",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (17).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "3",
+        "sentence_type": "declarative",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 3",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Can you hear me clearly?",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (17).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "3",
+        "sentence_type": "yes_no",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 3",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Is this pronunciation correct?",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (17).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "3",
+        "sentence_type": "yes_no",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 3",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Where are you from?",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (17).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "3",
+        "sentence_type": "wh",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 3",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Why is pronunciation important?",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (17).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "3",
+        "sentence_type": "wh",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_sentence",
+      "topic": "Pronunciation Paper 3",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Shall we start now?",
+      "candidate_instructions": "Read the sentence once. Use intonation appropriate to the sentence type; do not imitate a model audio.",
+      "prep_seconds": 3,
+      "response_seconds": 20,
+      "source_reference": "đề thi giấy/Preparing name… (17).pdf",
+      "source_notes": "Verbatim sentence from paper exam; online unit is one recording for sentence-level acoustic analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "sentence_stress",
+        "intonation",
+        "phrasing"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_sentences",
+        "paper_set": "3",
+        "sentence_type": "yes_no",
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_passage",
+      "topic": "Pronunciation Paper 3",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Good pronunciation is not about speaking quickly. It is about speaking clearly and confidently. Stress and intonation help listeners understand meaning. Pausing at the right time is also important. Clear pronunciation makes communication more effective. The speaker should focus on clear communication.",
+      "candidate_instructions": "Read the passage aloud once. Maintain clear phrasing and natural pacing; no model audio is played.",
+      "prep_seconds": 30,
+      "response_seconds": 60,
+      "source_reference": "đề thi giấy/Preparing name… (17).pdf",
+      "source_notes": "Verbatim passage from paper exam; online unit records one passage for alignment and fluency analysis. The added sentence is an online length-normalization proposal and must be approved separately; it is not verbatim paper content.",
+      "criterion_refs": [
+        "target_sounds",
+        "stress_intonation",
+        "fluency",
+        "phrasing",
+        "content_completeness"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_passages",
+        "paper_set": "3",
+        "word_count": 42,
+        "word_count_range": [
+          40,
+          60
+        ],
+        "response_mode": "read_aloud"
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "pronunciation_passage",
+      "topic": "Pronunciation Paper 3",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Learning English pronunciation takes time and regular practice. Students need to listen carefully to different sounds. They should also notice stress and intonation patterns. Repeating words and sentences helps build confidence. Over time, pronunciation will become clearer and more natural.",
+      "candidate_instructions": "Read the passage aloud once. Maintain clear phrasing and natural pacing; no model audio is played.",
+      "prep_seconds": 30,
+      "response_seconds": 60,
+      "source_reference": "đề thi giấy/Preparing name… (17).pdf",
+      "source_notes": "Verbatim passage from paper exam; online unit records one passage for alignment and fluency analysis.",
+      "criterion_refs": [
+        "target_sounds",
+        "stress_intonation",
+        "fluency",
+        "phrasing",
+        "content_completeness"
+      ],
+      "exam_metadata": {
+        "content_family": "pronunciation_passages",
+        "paper_set": "3",
+        "word_count": 40,
+        "word_count_range": [
+          40,
+          60
+        ],
+        "response_mode": "read_aloud"
+      }
+    }
+  ]
+}

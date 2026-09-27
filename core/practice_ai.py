@@ -9,7 +9,7 @@ class PracticeGenerationError(Exception):
 
 
 def generate_practice_questions(*, level, topic, question_count):
-    model = os.getenv("LOCAL_AI_MODEL", "ornith1.5:9b")
+    model = os.getenv("LOCAL_AI_MODEL", "ornith-1.5:9b")
     endpoint = os.getenv("LOCAL_AI_BASE_URL", "http://host.docker.internal:11434").rstrip("/") + "/api/chat"
     requested_topic = topic or "choose one suitable everyday topic"
     payload = {

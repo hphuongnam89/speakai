@@ -81,7 +81,7 @@ document.querySelectorAll(".audio-record-form").forEach((form) => {
         toggle.setAttribute("aria-pressed", "false");
         toggle.textContent = "Ghi lại";
         timer.textContent = `${duration} giây đã ghi`;
-        status.textContent = "Nghe thử bản ghi, sau đó chọn lưu câu trả lời.";
+        status.textContent = "Nghe thử bản ghi ở trình phát bên trên, sau đó lưu câu trả lời.";
       };
       stopRecording = finish;
       recordingActive = true;

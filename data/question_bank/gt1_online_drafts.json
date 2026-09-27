@@ -1,0 +1,699 @@
+{
+  "schema_version": "paper-online-draft-v1",
+  "status": "draft_only",
+  "source_policy": "No item is approved by this file. Every item requires independent teacher review.",
+  "items": [
+    {
+      "language": "en",
+      "task_type": "self_introduction",
+      "topic": "Introduction",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Introduce yourself. Include your name, your study or work, and one regular activity or interest.",
+      "candidate_instructions": "Speak individually for up to 45 seconds. You may use the three prompts as a guide; do not read a prepared script.",
+      "prep_seconds": 15,
+      "response_seconds": 45,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Adapted from Task 1A “Introduce yourself”. The paper gives no timing; 15/45 seconds are online pilot settings.",
+      "required_points": [
+        "name",
+        "study_or_work",
+        "activity_or_interest"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_a",
+        "response_mode": "individual",
+        "expected_evidence": [
+          "three_prompt_points"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Free Time & Hobbies",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Describe one activity you do in your free time and say how often you do it.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'What do you do in your free time?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "What do you do in your free time?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Free Time & Hobbies",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Tell us about one programme or type of video you watch, or explain why you do not watch TV.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'Do you like watching TV?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "Do you like watching TV?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Free Time & Hobbies",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Tell us about a sport you play or watch, or explain why you do not play sports.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'Do you play sports?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "Do you play sports?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Free Time & Hobbies",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "What do you usually do on weekends? Give one example and say who you do it with.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'What do you do at the weekend?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "What do you do at the weekend?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Free Time & Hobbies",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Do you prefer staying at home or going out? Give one reason and one example.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'Do you prefer staying at home or going out?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "Do you prefer staying at home or going out?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Food & Drinks",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "What is your favourite food? Describe it briefly and say when you usually eat it.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'What is your favourite food?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "What is your favourite food?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Food & Drinks",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "What do you usually eat for breakfast? Give two examples or describe a typical breakfast.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'What do you usually eat for breakfast?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "What do you usually eat for breakfast?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Food & Drinks",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Do you like fast food? Give one example and one reason for your answer.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'Do you like fast food?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "Do you like fast food?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Food & Drinks",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "What is your favourite drink? Say when you usually have it and why you like it.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'What is your favorite drink?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "What is your favorite drink?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Food & Drinks",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Can you cook? Name one dish you can cook and describe one step.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'Can you cook? What can you cook?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "Can you cook? What can you cook?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Home & Neighborhood",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Do you live in a house or an apartment? Describe one feature of your home.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'Where do you live (house or apartment)?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "Where do you live (house or apartment)?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Home & Neighborhood",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "How many rooms are there in your home? Name your favourite room and give one reason.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'How many rooms are there in your home?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "How many rooms are there in your home?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Home & Neighborhood",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "What is your favourite room at home? Describe two things in it.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'What is your favorite room?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "What is your favorite room?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Home & Neighborhood",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Is your neighbourhood quiet or busy? Give one example of what you can see or hear there.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'Is your neighborhood quiet or busy?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "Is your neighborhood quiet or busy?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Home & Neighborhood",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Is there a supermarket near your home? Say where it is and how you usually get there.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'Is there a supermarket near your home?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "Is there a supermarket near your home?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Transportation",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "How do you usually travel to school or work? Give one reason for your choice.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'How do you go to school / work?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "How do you go to school / work?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Transportation",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "How long does your usual journey to school or work take? Say when you travel.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'How long does it take?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "How long does it take?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Transportation",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Which transport do you use most often? Give one advantage or disadvantage.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'Do you use a bike, motorbike, bus, or car?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "Do you use a bike, motorbike, bus, or car?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Transportation",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "Do you like travelling by bus? Give one reason and one example from a usual journey.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'Do you like traveling by bus?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "Do you like traveling by bus?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    },
+    {
+      "language": "en",
+      "task_type": "short_qa",
+      "topic": "Transportation",
+      "target_level_min": "A1",
+      "target_level_max": "A2",
+      "prompt_text": "How often do you walk for transport or exercise? Say where you usually walk.",
+      "candidate_instructions": "Answer individually in 2–4 connected sentences. Give the requested reason or example when the prompt asks for one.",
+      "prep_seconds": 10,
+      "response_seconds": 40,
+      "source_reference": "đề thi giấy/2. Giao tiếp 1 NNA - Đề 1–3 (VĐ), trang 1–2",
+      "source_notes": "Original paper prompt: 'How often do you walk?'. Adapted from individual Task 1B for online recording and AI evidence extraction; wording is not a verbatim replacement.",
+      "required_points": [
+        "direct_answer",
+        "requested_detail"
+      ],
+      "criterion_refs": [
+        "pronunciation",
+        "fluency",
+        "grammar",
+        "vocabulary",
+        "task_achievement"
+      ],
+      "exam_metadata": {
+        "content_family": "gt1_b",
+        "response_mode": "individual",
+        "source_prompt": "How often do you walk?",
+        "expected_evidence": [
+          "direct_answer",
+          "one_detail_or_reason"
+        ]
+      }
+    }
+  ]
+}

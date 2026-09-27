@@ -1,0 +1,7 @@
+{% extends "core/base.html" %}
+{% block title %}Nhập ngân hàng câu hỏi{% endblock %}
+{% block content %}
+<section class="dashboard-shell narrow-shell"><p class="eyebrow">NGÂN HÀNG CÂU HỎI · IMPORT</p><h1>Nhập câu hỏi từ JSON</h1><p class="lede">Câu hỏi được nhập ở trạng thái bản nháp. Chỉ câu đã được giảng viên duyệt mới được sampler đưa vào đề official.</p>
+<form method="post" class="question-form">{% csrf_token %}{% if form.non_field_errors %}<div class="form-error">{{ form.non_field_errors }}</div>{% endif %}<label for="course">Học phần</label><select id="course" name="course" required>{% for item in courses %}<option value="{{ item.pk }}"{% if course.pk == item.pk %} selected{% endif %}>{{ item.code }} — {{ item.name }}</option>{% endfor %}</select>{{ form.as_p }}<div class="form-actions"><button class="button button-primary" type="submit">Nhập thành bản nháp</button><a class="text-link" href="{% url 'question_bank' %}">Hủy</a></div></form>
+<details class="note-panel"><summary>Schema mẫu</summary><pre>[{"language":"en","task_type":"short_qa","topic":"Daily life","target_level_min":"A1","target_level_max":"A2","prompt_text":"Describe your morning.","candidate_instructions":"Speak for 40 seconds.","prep_seconds":10,"response_seconds":40,"source_reference":"GT1 source p. 12","exam_metadata":{"content_family":"topic-b","sentence_type":"declarative","phoneme_targets":["/i:/"]},"criterion_refs":["task_achievement"]}]</pre></details>
+</section>{% endblock %}

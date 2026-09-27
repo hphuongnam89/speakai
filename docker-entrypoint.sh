@@ -6,7 +6,7 @@ if [ "$(id -u)" = "0" ]; then
   chown -R app:app /app/media
   mkdir -p /app/.cache
   chown -R app:app /app/.cache
-  exec su -s /bin/sh app -c "$*"
+  exec runuser -u app -- "$@"
 fi
 
 exec "$@"

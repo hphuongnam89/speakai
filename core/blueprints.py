@@ -34,8 +34,44 @@ def question_snapshot(question):
         "criterion_refs": question.criterion_refs,
         "source_reference": question.source_reference,
         "source_notes": question.source_notes,
+        "exam_metadata": question.exam_metadata,
         "tags": list(question.tags.order_by("slug").values_list("slug", flat=True)),
     }
+
+
+def _rule_values(rules, key):
+    value = rules.get(key)
+    if isinstance(value, str):
+        return {value}
+    if isinstance(value, list):
+        return {item for item in value if isinstance(item, str)}
+    return set()
+
+
+def _metadata_match(question, rules):
+    for key in ("content_family", "image_group", "phoneme_targets", "syllable_group", "sentence_type"):
+        expected = _rule_values(rules, key)
+        if expected and not expected.intersection(_rule_values(question.exam_metadata, key)):
+            return False
+    for key in ("word_count_min", "word_count_max", "syllable_count_min", "syllable_count_max"):
+        value = rules.get(key)
+        actual = question.exam_metadata.get(key)
+        if value is None:
+            continue
+        if not isinstance(value, int) or not isinstance(actual, int):
+            return False
+        if key.endswith("_min") and actual < value:
+            return False
+        if key.endswith("_max") and actual > value:
+            return False
+    required_tags = _rule_values(rules, "required_tags")
+    if required_tags and not required_tags.issubset(set(question.tags.values_list("slug", flat=True))):
+        return False
+    return True
+
+
+def _candidate_group(question):
+    return question.exam_metadata.get("content_family") or f"question:{question.question_id}"
 
 
 @transaction.atomic
@@ -61,17 +97,16 @@ def sample_blueprint(*, blueprint_version, topic, created_by, seed=None):
         raise ValidationError("Seed phải là số nguyên trong phạm vi 0 đến 2^63−1.")
 
     rng = random.Random(seed)
-    pools = {}
-    pool_snapshots = []
-    exclusions = []
+    pools, pool_snapshots, exclusions = {}, [], []
     base = QuestionVersion.objects.filter(question__course=blueprint_version.blueprint.course)
 
     for slot in slots:
+        rules = slot.selection_rules or {}
         stage = base.filter(status=QuestionVersion.Status.APPROVED)
-        unapproved_count = base.exclude(status=QuestionVersion.Status.APPROVED).count()
-        other_topic_count = stage.exclude(topic=topic).count()
-        topic_pool = stage.filter(topic=topic)
-        other_task_count = topic_pool.exclude(task_type=slot.task_type).count()
+        topics = _rule_values(rules, "topics")
+        if not topics:
+            topics = {topic}
+        topic_pool = stage.filter(topic__in=topics)
         compatible = topic_pool.filter(
             task_type=slot.task_type,
             language=slot.language,
@@ -84,39 +119,36 @@ def sample_blueprint(*, blueprint_version, topic, created_by, seed=None):
         )
         if slot.prep_seconds is not None:
             compatible = compatible.filter(prep_seconds=slot.prep_seconds)
-        eligible = list(
-            compatible.select_for_update(of=("self",)).select_related("question").prefetch_related("tags").order_by("pk")
-        )
-        incompatible_count = topic_pool.filter(task_type=slot.task_type).count() - len(eligible)
+        eligible = [
+            question for question in compatible.select_for_update(of=("self",)).select_related("question")
+            .prefetch_related("tags").order_by("pk") if _metadata_match(question, rules)
+        ]
         rng.shuffle(eligible)
         pools[slot.pk] = eligible
         pool_snapshots.append({
             "slot_id": slot.pk,
             "section_name": slot.section_name,
             "task_type": slot.task_type,
+            "selection_rules": rules,
             "candidate_version_ids": [item.pk for item in eligible],
         })
         exclusions.append({
             "slot_id": slot.pk,
-            "not_approved": unapproved_count,
-            "different_topic": other_topic_count,
-            "different_task_type": other_task_count,
-            "metadata_or_source_mismatch": max(incompatible_count, 0),
+            "not_approved": base.exclude(status=QuestionVersion.Status.APPROVED).count(),
+            "different_topic": stage.exclude(topic__in=topics).count(),
+            "different_task_type": topic_pool.exclude(task_type=slot.task_type).count(),
+            "metadata_or_source_mismatch": max(topic_pool.filter(task_type=slot.task_type).count() - len(eligible), 0),
         })
 
-    demands = [
-        (slot.pk, item_number)
-        for slot in slots
-        for item_number in range(slot.question_count)
-    ]
+    demands = [(slot.pk, item_number) for slot in slots for item_number in range(slot.question_count)]
     tie_order = {demand: rng.random() for demand in demands}
     demands.sort(key=lambda demand: (len(pools[demand[0]]), tie_order[demand]))
-    candidate_owner = {}
-    demand_selection = {}
+    candidate_owner, demand_selection, used_groups = {}, {}, set()
 
     def assign(demand, visited):
         for candidate in pools[demand[0]]:
-            if candidate.pk in visited:
+            group = _candidate_group(candidate)
+            if candidate.pk in visited or group in used_groups:
                 continue
             visited.add(candidate.pk)
             current = candidate_owner.get(candidate.pk)
@@ -127,7 +159,9 @@ def sample_blueprint(*, blueprint_version, topic, created_by, seed=None):
         return False
 
     for demand in demands:
-        assign(demand, set())
+        if not assign(demand, set()):
+            break
+        used_groups.add(_candidate_group(demand_selection[demand]))
 
     if len(demand_selection) != len(demands):
         shortages = []
@@ -144,10 +178,7 @@ def sample_blueprint(*, blueprint_version, topic, created_by, seed=None):
 
     selected = []
     for slot in slots:
-        questions = [
-            demand_selection[(slot.pk, item_number)]
-            for item_number in range(slot.question_count)
-        ]
+        questions = [demand_selection[(slot.pk, item_number)] for item_number in range(slot.question_count)]
         selected.append({
             "slot": {
                 "section_name": slot.section_name,
@@ -158,6 +189,8 @@ def sample_blueprint(*, blueprint_version, topic, created_by, seed=None):
                 "language": slot.language,
                 "prep_seconds": slot.prep_seconds,
                 "response_seconds": slot.response_seconds,
+                "selection_rules": slot.selection_rules,
+                "max_points": str(slot.max_points),
             },
             "rubric_version_id": slot.rubric_version_id,
             "rubric_version": slot.rubric_version.version,

@@ -37,7 +37,7 @@ services:
       DB_PORT: "5432"
       CELERY_BROKER_URL: redis://redis:6379/0
       LOCAL_AI_BASE_URL: ${LOCAL_AI_BASE_URL:-http://host.docker.internal:11434}
-      LOCAL_AI_MODEL: ${LOCAL_AI_MODEL:-ornith1.5:9b}
+      LOCAL_AI_MODEL: ${LOCAL_AI_MODEL:-ornith-1.5:9b}
       LOCAL_AI_TIMEOUT_SECONDS: ${LOCAL_AI_TIMEOUT_SECONDS:-150}
       WHISPER_MODEL: ${WHISPER_MODEL:-small}
       WHISPER_DEVICE: ${WHISPER_DEVICE:-cpu}
@@ -52,6 +52,10 @@ services:
       - "127.0.0.1:${WEB_PORT:-18080}:8000"
     volumes:
       - speaking_demo_media:/app/media
+      - ./core:/app/core
+      - ./config:/app/config
+      - ./templates:/app/templates
+      - ./static:/app/static
     depends_on:
       db:
         condition: service_healthy
@@ -70,7 +74,7 @@ services:
       DB_PORT: "5432"
       CELERY_BROKER_URL: redis://redis:6379/0
       LOCAL_AI_BASE_URL: ${LOCAL_AI_BASE_URL:-http://host.docker.internal:11434}
-      LOCAL_AI_MODEL: ${LOCAL_AI_MODEL:-ornith1.5:9b}
+      LOCAL_AI_MODEL: ${LOCAL_AI_MODEL:-ornith-1.5:9b}
       LOCAL_AI_TIMEOUT_SECONDS: ${LOCAL_AI_TIMEOUT_SECONDS:-150}
       WHISPER_MODEL: ${WHISPER_MODEL:-small}
       WHISPER_DEVICE: ${WHISPER_DEVICE:-cpu}

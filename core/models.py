@@ -1,6 +1,8 @@
+from decimal import Decimal
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.core.validators import MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import F, PROTECT, Q
 from django.db.models.signals import m2m_changed, pre_delete
@@ -9,6 +11,15 @@ from django.dispatch import receiver
 
 CEFR_LEVELS = (("A1", "A1"), ("A2", "A2"), ("B1", "B1"), ("B2", "B2"), ("C1", "C1"))
 CEFR_ORDER = {level: index for index, (level, _) in enumerate(CEFR_LEVELS)}
+RUBRIC_BANDS = tuple((str(level), str(level)) for level in range(5))
+RUBRIC_SIGNALS = (
+    ("audio", "Audio"),
+    ("transcript", "Bản chép lời"),
+    ("llm", "LLM"),
+    ("combined", "Kết hợp"),
+    ("manual", "Giảng viên"),
+)
+RUBRIC_SIGNAL_VALUES = {value for value, _label in RUBRIC_SIGNALS}
 
 
 class Course(models.Model):
@@ -114,6 +125,7 @@ class QuestionVersion(models.Model):
     criterion_refs = models.JSONField(default=list, blank=True)
     source_reference = models.CharField(max_length=255, blank=True)
     source_notes = models.TextField(blank=True)
+    exam_metadata = models.JSONField(default=dict, blank=True)
     status = models.CharField(max_length=16, choices=Status.choices, default=Status.DRAFT)
     tags = models.ManyToManyField(QuestionTag, blank=True, related_name="question_versions")
     created_at = models.DateTimeField(auto_now_add=True)
@@ -156,6 +168,7 @@ class QuestionVersion(models.Model):
                 "target_level_min", "target_level_max", "prompt_text", "candidate_instructions",
                 "prep_seconds", "response_seconds", "required_points", "optional_prompts",
                 "allowed_alternatives", "criterion_refs", "source_reference", "source_notes",
+                "exam_metadata",
             )
             if previous.status != self.Status.DRAFT and any(
                 getattr(previous, field) != getattr(self, field) for field in content_fields
@@ -318,6 +331,9 @@ class RubricVersion(models.Model):
                 {
                     "name": criterion.name,
                     "description": criterion.description,
+                    "weight": str(criterion.weight),
+                    "signal": criterion.signal,
+                    "bands": criterion.bands,
                     "max_points": str(criterion.max_points) if criterion.max_points is not None else None,
                     "descriptors": [
                         {"level": descriptor.level, "text": descriptor.text}
@@ -332,25 +348,15 @@ class RubricVersion(models.Model):
         criteria = list(self.criteria.prefetch_related("descriptors"))
         if not self.source_reference.strip() or not criteria:
             raise ValidationError("Rubric cần có nguồn và ít nhất một tiêu chí trước khi xuất bản.")
-        expected_levels = None
-        if self.target_level_min and self.target_level_max:
-            first = CEFR_ORDER[self.target_level_min]
-            last = CEFR_ORDER[self.target_level_max]
-            expected_levels = {
-                level for level, _ in CEFR_LEVELS
-                if first <= CEFR_ORDER[level] <= last
-            }
+        total_weight = sum((criterion.weight for criterion in criteria), Decimal("0"))
+        if total_weight != Decimal("100.00"):
+            raise ValidationError("Tổng trọng số rubric phải bằng 100%.")
         for criterion in criteria:
-            levels = {
-                descriptor.level for descriptor in criterion.descriptors.all()
-                if descriptor.text.strip()
-            }
-            if not levels:
-                raise ValidationError(f"Tiêu chí '{criterion.name}' cần có descriptor theo cấp độ.")
-            if expected_levels and not expected_levels.issubset(levels):
-                raise ValidationError(
-                    f"Tiêu chí '{criterion.name}' cần descriptor cho mọi cấp độ trong dải rubric."
-                )
+            if criterion.signal not in RUBRIC_SIGNAL_VALUES:
+                raise ValidationError(f"Tiêu chí '{criterion.name}' có nguồn tín hiệu không hợp lệ.")
+            levels = {descriptor.level for descriptor in criterion.descriptors.all() if descriptor.text.strip()}
+            if levels != {str(level) for level in range(5)}:
+                raise ValidationError(f"Tiêu chí '{criterion.name}' cần đủ descriptor band 0–4.")
 
     def delete(self, *args, **kwargs):
         raise ValidationError("Không thể xóa phiên bản rubric; hãy tạo bản mới hoặc ngừng sử dụng.")
@@ -364,6 +370,12 @@ class RubricCriterion(models.Model):
     position = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
     name = models.CharField(max_length=120)
     description = models.TextField(blank=True)
+    signal = models.CharField(max_length=64, default="llm")
+    bands = models.JSONField(default=dict, blank=True)
+    weight = models.DecimalField(
+        max_digits=5, decimal_places=2, default=Decimal("0.00"),
+        validators=[MinValueValidator(Decimal("0.01")), MaxValueValidator(Decimal("100.00"))],
+    )
     max_points = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
 
     class Meta:
@@ -396,7 +408,7 @@ class RubricCriterion(models.Model):
 
 class CriterionLevelDescriptor(models.Model):
     criterion = models.ForeignKey(RubricCriterion, on_delete=models.CASCADE, related_name="descriptors")
-    level = models.CharField(max_length=2, choices=CEFR_LEVELS)
+    level = models.CharField(max_length=1, choices=RUBRIC_BANDS)
     text = models.TextField()
 
     class Meta:
@@ -487,6 +499,7 @@ class ExamBlueprint(models.Model):
 
 
 class BlueprintVersion(models.Model):
+    ASSESSMENT_TYPES = (("custom", "Custom"), ("gt1", "GT1"), ("pronunciation", "Ngữ âm"))
     class Status(models.TextChoices):
         DRAFT = "draft", "Nháp"
         PUBLISHED = "published", "Đã xuất bản"
@@ -500,6 +513,8 @@ class BlueprintVersion(models.Model):
     title = models.CharField(max_length=160)
     source_reference = models.CharField(max_length=255)
     source_notes = models.TextField(blank=True)
+    assessment_type = models.CharField(max_length=20, choices=ASSESSMENT_TYPES, default="custom")
+    pass_threshold = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     status = models.CharField(max_length=16, choices=Status.choices, default=Status.DRAFT)
     published_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -518,7 +533,7 @@ class BlueprintVersion(models.Model):
         else:
             previous = type(self).objects.get(pk=self.pk)
             locked_fields = (
-                "blueprint_id", "version", "created_by_id", "title", "source_reference", "source_notes",
+                "blueprint_id", "version", "created_by_id", "title", "source_reference", "source_notes", "assessment_type", "pass_threshold",
             )
             if previous.status != self.Status.DRAFT and any(
                 getattr(previous, field) != getattr(self, field) for field in locked_fields
@@ -543,6 +558,8 @@ class BlueprintVersion(models.Model):
         slots = list(self.slots.select_related("rubric_version"))
         if not self.source_reference.strip() or not slots:
             raise ValidationError("Blueprint cần nguồn và ít nhất một slot trước khi xuất bản.")
+        from core.blueprint_schema import validate_blueprint_schema
+        validate_blueprint_schema(self)
         for slot in slots:
             rubric = slot.rubric_version
             if rubric.status != RubricVersion.Status.PUBLISHED:
@@ -550,26 +567,21 @@ class BlueprintVersion(models.Model):
             if (rubric.rubric.course_id != self.blueprint.course_id
                     or rubric.section_name != slot.section_name or rubric.task_type != slot.task_type):
                 raise ValidationError(f"Rubric của phần '{slot.section_name}' không khớp học phần/dạng bài.")
-            first, last = CEFR_ORDER[slot.target_level_min], CEFR_ORDER[slot.target_level_max]
-            expected = {
-                level for level, _ in CEFR_LEVELS
-                if first <= CEFR_ORDER[level] <= last
-            }
             criteria = list(rubric.criteria.prefetch_related("descriptors"))
             if not criteria:
                 raise ValidationError(f"Rubric của phần '{slot.section_name}' chưa có tiêu chí.")
             for criterion in criteria:
                 available = {item.level for item in criterion.descriptors.all() if item.text.strip()}
-                if not expected.issubset(available):
-                    raise ValidationError(
-                        f"Rubric của phần '{slot.section_name}' thiếu descriptor cho dải cấp độ blueprint."
-                    )
+                if available != {"0", "1", "2", "3", "4"}:
+                    raise ValidationError(f"Rubric của phần '{slot.section_name}' thiếu descriptor band 0–4.")
 
     def content_snapshot(self):
         return {
             "title": self.title,
             "source_reference": self.source_reference,
             "source_notes": self.source_notes,
+            "assessment_type": self.assessment_type,
+            "pass_threshold": str(self.pass_threshold) if self.pass_threshold is not None else None,
             "slots": [
                 {
                     "position": slot.position,
@@ -581,6 +593,8 @@ class BlueprintVersion(models.Model):
                     "language": slot.language,
                     "prep_seconds": slot.prep_seconds,
                     "response_seconds": slot.response_seconds,
+                    "selection_rules": slot.selection_rules,
+                    "max_points": str(slot.max_points),
                     "rubric_version_id": slot.rubric_version_id,
                     "rubric_version": slot.rubric_version.version,
                     "rubric": slot.rubric_version.content_snapshot(),
@@ -634,6 +648,8 @@ class BlueprintSlot(models.Model):
     language = models.CharField(max_length=16, default="en")
     prep_seconds = models.PositiveIntegerField(null=True, blank=True)
     response_seconds = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    selection_rules = models.JSONField(default=dict, blank=True)
+    max_points = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal("1.00"), validators=[MinValueValidator(Decimal("0.01"))])
     rubric_version = models.ForeignKey(RubricVersion, on_delete=PROTECT, related_name="blueprint_slots")
 
     class Meta:
@@ -712,6 +728,98 @@ def prevent_blueprint_sample_deletion(sender, instance, **kwargs):
 @receiver(pre_delete, sender=BlueprintAuditEvent)
 def prevent_blueprint_audit_deletion(sender, instance, **kwargs):
     raise ValidationError("Không thể xóa lịch sử blueprint.")
+
+
+def exam_audio_upload_path(instance, _filename):
+    return (
+        f"exam-audio/{instance.attempt.student_id}/{instance.attempt_id}/"
+        f"question-{instance.question_index}.{instance.audio_extension}"
+    )
+
+
+class ExamAttempt(models.Model):
+    class Status(models.TextChoices):
+        IN_PROGRESS = "in_progress", "Đang làm"
+        SUBMITTED = "submitted", "Đã nộp"
+
+    class ScoringStatus(models.TextChoices):
+        NOT_STARTED = "not_started", "Chưa chấm"
+        NEEDS_REVIEW = "needs_review", "Cần rà soát"
+        FINAL = "final", "Đã duyệt điểm"
+
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=PROTECT, related_name="exam_attempts")
+    course = models.ForeignKey(Course, on_delete=PROTECT, related_name="exam_attempts")
+    blueprint_version = models.ForeignKey(BlueprintVersion, on_delete=PROTECT, related_name="exam_attempts")
+    seed = models.PositiveBigIntegerField()
+    blueprint_snapshot = models.JSONField()
+    questions_snapshot = models.JSONField()
+    threshold = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    passed = models.BooleanField(null=True, blank=True)
+    started_at = models.DateTimeField(null=True, blank=True)
+    expires_at = models.DateTimeField(null=True, blank=True)
+    status = models.CharField(max_length=16, choices=Status.choices, default=Status.IN_PROGRESS)
+    scoring_status = models.CharField(max_length=16, choices=ScoringStatus.choices, default=ScoringStatus.NOT_STARTED)
+    scoring_result = models.JSONField(default=dict, blank=True)
+    ai_score = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    final_score = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    final_feedback = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    submitted_at = models.DateTimeField(null=True, blank=True)
+    reviewed_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=PROTECT, null=True, blank=True, related_name="reviewed_exam_attempts")
+    reviewed_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ("-created_at", "-id")
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            previous = type(self).objects.get(pk=self.pk)
+            locked = ("student_id", "course_id", "blueprint_version_id", "seed", "blueprint_snapshot", "questions_snapshot")
+            if any(getattr(previous, field) != getattr(self, field) for field in locked):
+                raise ValidationError("Snapshot và chủ sở hữu lượt thi là bất biến.")
+            if previous.status == self.Status.SUBMITTED and self.status != self.Status.SUBMITTED:
+                raise ValidationError("Không thể mở lại lượt thi đã nộp.")
+        return super().save(*args, **kwargs)
+
+
+class ExamAnswer(models.Model):
+    attempt = models.ForeignKey(ExamAttempt, on_delete=PROTECT, related_name="answers")
+    question_index = models.PositiveSmallIntegerField()
+    audio = models.FileField(upload_to=exam_audio_upload_path)
+    audio_extension = models.CharField(max_length=5)
+    content_type = models.CharField(max_length=32)
+    duration_seconds = models.PositiveSmallIntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ("question_index",)
+        constraints = [models.UniqueConstraint(fields=("attempt", "question_index"), name="unique_exam_answer_per_question")]
+
+    def save(self, *args, **kwargs):
+        if self.attempt.status != ExamAttempt.Status.IN_PROGRESS:
+            raise ValidationError("Bài thi đã nộp, không thể thay đổi bản ghi.")
+        return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise ValidationError("Không thể xóa bản ghi official exam.")
+
+
+class ExamScoreDecision(models.Model):
+    attempt = models.ForeignKey(ExamAttempt, on_delete=PROTECT, related_name="score_decisions")
+    actor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=PROTECT, related_name="exam_score_decisions")
+    decision = models.CharField(max_length=32)
+    score = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    payload = models.JSONField(default=dict, blank=True)
+    reason = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            raise ValidationError("Quyết định điểm thi là bất biến.")
+        return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise ValidationError("Không thể xóa quyết định điểm thi.")
 
 
 def practice_audio_upload_path(instance, _filename):

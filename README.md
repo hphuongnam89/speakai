@@ -21,7 +21,7 @@ To create synthetic demo accounts, first replace all three `DEMO_*_PASSWORD` val
 docker compose exec web python manage.py seed_demo
 ```
 
-The command creates `demo-student`, `demo-teacher`, and `demo-admin`, their role groups, and a synthetic GT1 course enrollment/teacher assignment so the local practice demo is reachable. It creates no academic questions or official exams. It is safe to repeat and refuses placeholder passwords or conflicting accounts. Passwords are hashed by Django and never printed. `demo-admin` is not a Django staff account; use the separately created superuser for Django Admin.
+The command creates `demo-student`, `demo-teacher`, and `demo-admin`, their role groups, and a synthetic GT1 course enrollment/teacher assignment so the local practice demo is reachable. It creates no academic questions or official exams. It is safe to repeat and refuses placeholder passwords or conflicting accounts. Passwords are hashed by Django and never printed. The non-staff `demo-admin` can manage `demo-*` accounts from the in-app **Tài khoản demo** page; a separate superuser is still required for Django Admin.
 
 Stop containers without deleting the database volume:
 

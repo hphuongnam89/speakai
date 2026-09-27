@@ -1,0 +1,5 @@
+{% extends "core/base.html" %}
+{% block title %}Chấm kỳ thi{% endblock %}
+{% block content %}
+<section class="page-shell"><h1>Chấm kỳ thi của {{ attempt.student.username }}</h1><p>{{ attempt.course.name }} · trạng thái {{ attempt.get_scoring_status_display }}</p><p>Payload JSON phải có mỗi câu và đủ criterion theo rubric snapshot. Dùng <code>band</code> từ 0 đến 4; dùng <code>status: unscorable</code> khi không đủ bằng chứng.</p><form method="post" class="stack-form">{% csrf_token %}{{ form.as_p }}<button class="button button-primary" type="submit">Lưu quyết định điểm</button></form></section>
+{% endblock %}

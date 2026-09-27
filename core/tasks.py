@@ -19,7 +19,7 @@ def _text_items(value, limit, max_items):
 
 def _ollama_score(*, attempt, transcripts):
     endpoint = os.getenv("LOCAL_AI_BASE_URL", "http://host.docker.internal:11434").rstrip("/") + "/api/chat"
-    model = os.getenv("LOCAL_AI_MODEL", "ornith1.5:9b")
+    model = os.getenv("LOCAL_AI_MODEL", "ornith-1.5:9b")
     payload = {
         "model": model, "stream": False, "think": False, "format": "json",
         "messages": [

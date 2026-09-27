@@ -1,9 +1,15 @@
+from datetime import timedelta
+from decimal import Decimal
 from functools import wraps
 import secrets
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
 from django.db import DatabaseError, connection, transaction
+from django.db.models import Q
+from django.core.paginator import Paginator
 from django.http import FileResponse, HttpResponse, HttpResponseForbidden, JsonResponse
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
@@ -12,12 +18,15 @@ from django.utils import timezone
 
 from core.blueprints import InsufficientQuestionPool, sample_blueprint
 from core.forms import (
-    BlueprintSampleForm, BlueprintVersionForm, PracticeAnswerForm, PracticeCreateForm,
-    QuestionVersionForm, RubricVersionForm, PracticeReviewForm,
+    BlueprintSampleForm, BlueprintVersionForm, DemoAccountForm, ExamScoreForm, ExamStartForm,
+    PracticeAnswerForm, PracticeCreateForm, QuestionImportForm, QuestionVersionForm, RubricVersionForm, PracticeReviewForm,
+    ExamClaimForm,
 )
 from core.practice_ai import PracticeGenerationError, generate_practice_questions
+from core.official_scoring import score_official_attempt
 from core.models import (
     BlueprintAuditEvent, BlueprintSlot, BlueprintVersion, Course, CourseTeachingAssignment,
+    ExamAnswer, ExamAttempt, ExamScoreDecision,
     CriterionLevelDescriptor, ExamBlueprint, PracticeAnswer, PracticeAttempt,
     Question, QuestionReview, QuestionVersion,
     Rubric, RubricAuditEvent, RubricCriterion, RubricVersion,
@@ -66,10 +75,14 @@ def student_dashboard(request):
     courses = Course.objects.filter(
         is_active=True, enrollments__student=request.user,
     ).distinct()
+    official_versions = BlueprintVersion.objects.filter(
+        blueprint__course__in=courses, status=BlueprintVersion.Status.PUBLISHED,
+    ).select_related("blueprint__course").order_by("blueprint__course__code", "-version")
     attempt_history = PracticeAttempt.objects.filter(student=request.user)
     attempts = attempt_history.select_related("course")[:3]
     return render(request, "core/dashboard_student.html", {
         "courses": courses,
+        "official_versions": official_versions,
         "attempts": attempts,
         "attempts_total": attempt_history.count(),
     })
@@ -353,7 +366,106 @@ def teacher_dashboard(request):
 @role_required(ROLE_ADMIN)
 def admin_dashboard(request):
     attempts = PracticeAttempt.objects.select_related("student", "course").prefetch_related("answers")[:10]
-    return render(request, "core/dashboard_admin.html", {"practice_attempts": attempts})
+    accounts = list(
+        get_user_model().objects.filter(username__startswith="demo-")
+        .exclude(is_staff=True).exclude(is_superuser=True).prefetch_related("groups").order_by("username")
+    )
+    for account in accounts:
+        account.role_label = demo_role_label(account)
+    return render(request, "core/dashboard_admin.html", {
+        "practice_attempts": attempts,
+        "demo_accounts": accounts[:5],
+        "demo_account_total": len(accounts),
+    })
+
+
+def demo_role_label(account):
+    labels = {"student": "Sinh viên", "teacher": "Giảng viên", "admin": "Quản trị viên"}
+    roles = {group.name for group in account.groups.all()}
+    return next((label for role, label in labels.items() if role in roles), "Chưa gán vai trò")
+
+
+@role_required(ROLE_ADMIN)
+def demo_accounts(request):
+    User = get_user_model()
+    base_queryset = User.objects.filter(username__startswith="demo-").exclude(
+        is_staff=True,
+    ).exclude(is_superuser=True)
+    accounts = base_queryset.prefetch_related("groups").order_by("username")
+    query = request.GET.get("q", "").strip()
+    role = request.GET.get("role", "")
+    status = request.GET.get("status", "")
+    if query:
+        accounts = accounts.filter(Q(username__icontains=query) | Q(email__icontains=query))
+    if role in {ROLE_STUDENT, ROLE_TEACHER, ROLE_ADMIN}:
+        accounts = accounts.filter(groups__name=role).distinct()
+    if status == "active":
+        accounts = accounts.filter(is_active=True)
+    elif status == "inactive":
+        accounts = accounts.filter(is_active=False)
+    accounts = list(accounts)
+    for account in accounts:
+        account.role_label = demo_role_label(account)
+    return render(request, "core/demo_accounts.html", {
+        "accounts": accounts,
+        "accounts_total": base_queryset.count(),
+        "query": query,
+        "selected_role": role,
+        "selected_status": status,
+    })
+
+
+@role_required(ROLE_ADMIN)
+def demo_account_create(request):
+    form = DemoAccountForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        with transaction.atomic():
+            user = get_user_model().objects.create_user(
+                username=form.cleaned_data["username"],
+                email=form.cleaned_data["email"],
+                password=form.cleaned_data["password"],
+                is_active=form.cleaned_data["is_active"],
+            )
+            user.groups.add(Group.objects.get_or_create(name=form.cleaned_data["role"])[0])
+        messages.success(request, f"Tài khoản {user.username} đã được tạo.")
+        return redirect("demo_accounts")
+    return render(request, "core/demo_account_form.html", {"form": form, "creating": True})
+
+
+@role_required(ROLE_ADMIN)
+def demo_account_edit(request, username):
+    account = get_object_or_404(
+        get_user_model().objects.filter(username__startswith="demo-", is_staff=False, is_superuser=False),
+        username=username,
+    )
+    form = DemoAccountForm(request.POST or None, instance=account)
+    if request.method == "POST" and form.is_valid():
+        role = form.cleaned_data["role"]
+        active = form.cleaned_data["is_active"]
+        if account.pk == request.user.pk and (role != ROLE_ADMIN or not active):
+            form.add_error(None, "Không thể bỏ vai trò quản trị hoặc khóa chính tài khoản đang đăng nhập.")
+        elif role != ROLE_ADMIN or not active:
+            remaining_admin = get_user_model().objects.filter(is_active=True).filter(
+                Q(is_superuser=True) | Q(groups__name=ROLE_ADMIN),
+            ).exclude(pk=account.pk).exists()
+            if not remaining_admin:
+                form.add_error(None, "Cần giữ ít nhất một tài khoản quản trị đang hoạt động.")
+        if form.is_valid():
+            with transaction.atomic():
+                account.email = form.cleaned_data["email"]
+                account.is_active = active
+                account.save(update_fields=["email", "is_active"])
+                password = form.cleaned_data["password"]
+                if password:
+                    account.set_password(password)
+                    account.save(update_fields=["password"])
+                managed_groups = list(Group.objects.filter(name__in=[ROLE_STUDENT, ROLE_TEACHER, ROLE_ADMIN]))
+                if managed_groups:
+                    account.groups.remove(*managed_groups)
+                account.groups.add(Group.objects.get_or_create(name=role)[0])
+            messages.success(request, f"Tài khoản {account.username} đã được cập nhật.")
+            return redirect("demo_accounts")
+    return render(request, "core/demo_account_form.html", {"form": form, "account": account, "creating": False})
 
 
 def is_content_admin(user):
@@ -392,8 +504,62 @@ def version_in_scope(user, version_id):
 @content_staff_required
 def question_bank(request):
     courses = manageable_courses(request.user)
-    questions = Question.objects.filter(course__in=courses).select_related("course").prefetch_related("versions")
-    return render(request, "core/question_bank.html", {"questions": questions, "courses": courses})
+    all_versions = QuestionVersion.objects.filter(question__course__in=courses)
+    versions = all_versions.select_related("question", "question__course")
+    search = request.GET.get("q", "").strip()
+    course_id = request.GET.get("course", "")
+    task_type = request.GET.get("task_type", "")
+    level = request.GET.get("level", "")
+    status = request.GET.get("status", "")
+    if search:
+        versions = versions.filter(
+            Q(prompt_text__icontains=search) | Q(topic__icontains=search)
+            | Q(source_reference__icontains=search)
+        )
+    if course_id:
+        versions = versions.filter(question__course_id=course_id) if course_id.isdecimal() else versions.none()
+    if task_type:
+        versions = versions.filter(task_type=task_type)
+    if level:
+        versions = versions.filter(Q(target_level_min__lte=level, target_level_max__gte=level))
+    if status:
+        versions = versions.filter(status=status)
+    versions = versions.order_by("question__course__code", "question_id", "-version")
+    page = Paginator(versions, 20).get_page(request.GET.get("page"))
+    status_labels = {
+        QuestionVersion.Status.DRAFT: "Bản nháp",
+        QuestionVersion.Status.IN_REVIEW: "Chờ duyệt",
+        QuestionVersion.Status.APPROVED: "Đã duyệt",
+        QuestionVersion.Status.RETIRED: "Ngừng dùng",
+    }
+    for version in page.object_list:
+        version.status_label = status_labels[version.status]
+        version.task_type_label = version.task_type.replace("_", " ").title()
+    counts = {choice.value: all_versions.filter(status=choice.value).count()
+              for choice in QuestionVersion.Status}
+    task_types = all_versions.exclude(task_type="").values_list(
+        "task_type", flat=True
+    ).distinct().order_by("task_type")
+    return render(request, "core/question_bank.html", {
+        "versions": page.object_list,
+        "page_obj": page,
+        "courses": courses,
+        "search": search,
+        "selected_course": course_id,
+        "selected_task_type": task_type,
+        "selected_level": level,
+        "selected_status": status,
+        "task_types": [(item, item.replace("_", " ").title()) for item in task_types],
+        "levels": ("A1", "A2", "B1", "B2", "C1", "C2"),
+        "total_count": all_versions.count(),
+        "counts": counts,
+        "status_choices": (
+            (QuestionVersion.Status.DRAFT, "Bản nháp"),
+            (QuestionVersion.Status.IN_REVIEW, "Chờ duyệt"),
+            (QuestionVersion.Status.APPROVED, "Đã duyệt"),
+            (QuestionVersion.Status.RETIRED, "Ngừng dùng"),
+        ),
+    })
 
 
 @content_staff_required
@@ -421,6 +587,49 @@ def question_create(request):
             else:
                 return redirect("question_detail", question_id=question.pk)
     return render(request, "core/question_form.html", {"form": form, "courses": courses, "course": course})
+
+
+@content_staff_required
+def question_import(request):
+    courses = manageable_courses(request.user, active_only=True)
+    form = QuestionImportForm(request.POST or None)
+    course = courses.filter(pk=request.POST.get("course")).first() if request.method == "POST" else courses.first()
+    if request.method == "POST" and form.is_valid():
+        if not course:
+            form.add_error(None, "Học phần không hợp lệ hoặc chưa được phân công.")
+        else:
+            payload = form.cleaned_data["payload"]
+            if not isinstance(payload, list) or not payload or len(payload) > 200:
+                form.add_error("payload", "Payload phải là danh sách 1–200 câu hỏi.")
+            else:
+                required = {"language", "task_type", "topic", "prompt_text", "target_level_min", "target_level_max", "prep_seconds", "response_seconds", "source_reference", "exam_metadata"}
+                try:
+                    with transaction.atomic():
+                        for index, item in enumerate(payload, start=1):
+                            if not isinstance(item, dict) or not required.issubset(item):
+                                raise ValidationError(f"Câu {index}: thiếu trường bắt buộc.")
+                            if not isinstance(item["exam_metadata"], dict) or not item["exam_metadata"]:
+                                raise ValidationError(f"Câu {index}: exam_metadata phải là object JSON không rỗng.")
+                            question = Question.objects.create(course=course, created_by=request.user)
+                            version = QuestionVersion(
+                                question=question, version=1, created_by=request.user,
+                                language=item["language"], task_type=item["task_type"], topic=item["topic"],
+                                target_level_min=item["target_level_min"], target_level_max=item["target_level_max"],
+                                prompt_text=item["prompt_text"], candidate_instructions=item.get("candidate_instructions", ""),
+                                prep_seconds=item["prep_seconds"], response_seconds=item["response_seconds"],
+                                required_points=item.get("required_points", []), optional_prompts=item.get("optional_prompts", []),
+                                allowed_alternatives=item.get("allowed_alternatives", []), criterion_refs=item.get("criterion_refs", []),
+                                source_reference=item["source_reference"], source_notes=item.get("source_notes", ""),
+                                exam_metadata=item["exam_metadata"],
+                            )
+                            version.full_clean()
+                            version.save()
+                except (ValidationError, TypeError, ValueError) as exc:
+                    form.add_error(None, exc)
+                else:
+                    messages.success(request, f"Đã nhập {len(payload)} câu hỏi ở trạng thái bản nháp. Hãy gửi duyệt từng phiên bản.")
+                    return redirect("question_bank")
+    return render(request, "core/question_import.html", {"form": form, "courses": courses, "course": course})
 
 
 @content_staff_required
@@ -526,6 +735,7 @@ def question_new_revision(request, version_id):
             required_points=source.required_points, optional_prompts=source.optional_prompts,
             allowed_alternatives=source.allowed_alternatives, criterion_refs=source.criterion_refs,
             source_reference=source.source_reference, source_notes=source.source_notes,
+            exam_metadata=source.exam_metadata,
         )
         duplicate.tags.set(source.tags.all())
     return redirect("question_edit", version_id=duplicate.pk)
@@ -563,6 +773,9 @@ def save_rubric_criteria(version, payload):
             position=position,
             name=item["name"].strip(),
             description=item.get("description", "").strip(),
+            weight=item["weight"],
+            signal=item["signal"],
+            bands=item.get("bands") or {},
             max_points=item.get("max_points"),
         )
         CriterionLevelDescriptor.objects.bulk_create([
@@ -783,6 +996,8 @@ def save_blueprint_slots(version, payload):
             language=data["language"],
             prep_seconds=data["prep_seconds"],
             response_seconds=data["response_seconds"],
+            selection_rules=data.get("selection_rules") or {},
+            max_points=data.get("max_points", "1"),
             rubric_version_id=data["rubric_version_id"],
         )
         slot.full_clean()
@@ -938,7 +1153,7 @@ def blueprint_new_revision(request, version_id):
             {key: getattr(slot, key) for key in (
                 "section_name", "task_type", "question_count", "target_level_min", "target_level_max",
                 "language", "prep_seconds", "response_seconds",
-            )} | {"rubric_version_id": slot.rubric_version_id}
+            )} | {"selection_rules": slot.selection_rules, "max_points": str(slot.max_points), "rubric_version_id": slot.rubric_version_id}
             for slot in source.slots.all()
         ]
         save_blueprint_slots(revision, payload)
@@ -1021,3 +1236,237 @@ def readiness(request):
     except DatabaseError:
         return JsonResponse({"status": "not_ready"}, status=503)
     return JsonResponse({"status": "ready", "database": "ok"})
+
+
+@role_required(ROLE_STUDENT)
+def exam_start(request, version_id):
+    if request.method != "POST":
+        return HttpResponseForbidden("Bắt đầu kỳ thi cần POST.")
+    version = get_object_or_404(
+        BlueprintVersion.objects.select_related("blueprint", "blueprint__course").filter(
+            pk=version_id, status=BlueprintVersion.Status.PUBLISHED,
+            blueprint__course__enrollments__student=request.user,
+        )
+    )
+    form = ExamStartForm(request.POST)
+    if not form.is_valid():
+        return render(request, "core/exam_start.html", {"form": form, "version": version}, status=400)
+    request.session[f"official_preflight:{request.user.pk}"] = {
+        "version_id": version.pk, "topic": form.cleaned_data["topic"].strip() or "official",
+        "seed": form.cleaned_data["seed"], "nonce": secrets.token_urlsafe(24),
+        "created_at": timezone.now().timestamp(),
+    }
+    return redirect("exam_preflight")
+
+
+@role_required(ROLE_STUDENT)
+def exam_preflight(request):
+    setup = request.session.get(f"official_preflight:{request.user.pk}")
+    if not setup or timezone.now().timestamp() - setup.get("created_at", 0) > 1200:
+        request.session.pop(f"official_preflight:{request.user.pk}", None)
+        return redirect("dashboard_student")
+    version = get_object_or_404(BlueprintVersion.objects.select_related("blueprint__course"), pk=setup["version_id"], status=BlueprintVersion.Status.PUBLISHED, blueprint__course__enrollments__student=request.user)
+    return render(request, "core/exam_preflight.html", {
+        "setup": {"nonce": setup["nonce"], "level": version.blueprint.course.code, "question_count": sum(slot.question_count for slot in version.slots.all()), "response_seconds": max((slot.response_seconds for slot in version.slots.all()), default=0)},
+        "network_probe_url": reverse("exam_network_probe"), "preflight_complete_url": reverse("exam_preflight_complete"), "practice_start_url": reverse("exam_preflight_begin"),
+    })
+
+
+@role_required(ROLE_STUDENT)
+def exam_preflight_complete(request):
+    if request.method != "POST":
+        return HttpResponseForbidden("Xác nhận kiểm tra thiết bị cần POST.")
+    setup = request.session.get(f"official_preflight:{request.user.pk}")
+    if not setup or timezone.now().timestamp() - setup.get("created_at", 0) > 1200 or request.POST.get("nonce") != setup.get("nonce"):
+        return JsonResponse({"error": "Phiên kiểm tra đã hết hạn. Hãy bắt đầu lại."}, status=400)
+    try:
+        speed_bps, latency_ms = int(request.POST.get("speed_bps", "0")), int(request.POST.get("latency_ms", "-1"))
+    except ValueError:
+        return JsonResponse({"error": "Kết quả kiểm tra không hợp lệ."}, status=400)
+    if request.POST.get("mic_verified") != "1" or request.POST.get("playback_confirmed") != "1" or speed_bps < 32_768 or not 0 <= latency_ms <= 2000:
+        return JsonResponse({"error": "Cần kiểm tra micro và đạt ngưỡng kết nối trước khi tiếp tục."}, status=400)
+    setup.update(verified_at=timezone.now().timestamp(), speed_bps=speed_bps, latency_ms=latency_ms)
+    request.session[f"official_preflight:{request.user.pk}"] = setup
+    return JsonResponse({"ready": True})
+
+
+@role_required(ROLE_STUDENT)
+def exam_network_probe(request):
+    return network_probe(request)
+
+
+def _create_exam_attempt_from_preflight(request, setup):
+    version = get_object_or_404(BlueprintVersion.objects.select_related("blueprint__course"), pk=setup["version_id"], status=BlueprintVersion.Status.PUBLISHED, blueprint__course__enrollments__student=request.user)
+    try:
+        sample = sample_blueprint(blueprint_version=version, topic=setup["topic"], seed=setup.get("seed"), created_by=request.user)
+    except (InsufficientQuestionPool, ValidationError) as exc:
+        raise ValidationError(getattr(exc, "shortages", str(exc)))
+    questions, index = [], 1
+    for section in sample.selected_snapshot:
+        section_max = Decimal(str(section["slot"].get("max_points", "1")))
+        count = max(len(section["questions"]), 1)
+        for question in section["questions"]:
+            questions.append({
+                "question_index": index, "section_name": section["slot"]["section_name"],
+                "task_type": section["slot"]["task_type"], "question": question,
+                "rubric_snapshot": section["rubric_snapshot"], "task_max_points": str(section_max / count),
+            })
+            index += 1
+    started_at = timezone.now()
+    total_seconds = sum((slot.get("prep_seconds") or 0) + (slot.get("response_seconds") or 0) for slot in (section["slot"] for section in sample.selected_snapshot for _ in range(section["slot"]["question_count"])))
+    attempt = ExamAttempt.objects.create(
+        student=request.user, course=version.blueprint.course, blueprint_version=version,
+        seed=sample.seed, blueprint_snapshot=sample.blueprint_snapshot, questions_snapshot=questions,
+        threshold=version.pass_threshold, started_at=started_at, expires_at=started_at + timedelta(seconds=max(total_seconds, 60)),
+    )
+    return attempt
+
+
+@role_required(ROLE_STUDENT)
+def exam_preflight_begin(request):
+    if request.method != "POST":
+        return HttpResponseForbidden("Bắt đầu kỳ thi cần POST.")
+    setup = request.session.get(f"official_preflight:{request.user.pk}")
+    if not setup or not setup.get("verified_at") or timezone.now().timestamp() - setup["verified_at"] > 1200:
+        return redirect("exam_preflight")
+    try:
+        attempt = _create_exam_attempt_from_preflight(request, setup)
+    except ValidationError as exc:
+        messages.error(request, str(exc))
+        return redirect("exam_start", version_id=setup["version_id"])
+    request.session.pop(f"official_preflight:{request.user.pk}", None)
+    return redirect("exam_detail", attempt_id=attempt.pk)
+
+
+@role_required(ROLE_STUDENT)
+def exam_detail(request, attempt_id):
+    attempt = get_object_or_404(ExamAttempt.objects.prefetch_related("answers"), pk=attempt_id, student=request.user)
+    answers = {answer.question_index: answer for answer in attempt.answers.all()}
+    items = [{"index": q["question_index"], "question": q["question"], "answer": answers.get(q["question_index"])} for q in attempt.questions_snapshot]
+    return render(request, "core/exam_detail.html", {"attempt": attempt, "items": items, "saved_count": len(answers)})
+
+
+@role_required(ROLE_STUDENT)
+def exam_answer_upload(request, attempt_id):
+    if request.method != "POST":
+        return HttpResponseForbidden("Lưu câu trả lời cần POST.")
+    attempt = get_object_or_404(ExamAttempt, pk=attempt_id, student=request.user)
+    if attempt.status != ExamAttempt.Status.IN_PROGRESS:
+        return HttpResponseForbidden("Bài thi đã nộp.")
+    if attempt.expires_at and timezone.now() > attempt.expires_at:
+        attempt.status = ExamAttempt.Status.SUBMITTED
+        attempt.scoring_status = ExamAttempt.ScoringStatus.NEEDS_REVIEW
+        attempt.submitted_at = timezone.now()
+        attempt.save(update_fields=("status", "scoring_status", "submitted_at"))
+        messages.error(request, "Thời gian bài thi đã hết; bài đã được khóa.")
+        return redirect("exam_detail", attempt_id=attempt.pk)
+    form = PracticeAnswerForm(request.POST, request.FILES)
+    if form.is_valid():
+        index = form.cleaned_data["question_index"]
+        question = next((item for item in attempt.questions_snapshot if item["question_index"] == index), None)
+        if not question or form.cleaned_data["duration_seconds"] > int(question["question"].get("response_seconds") or 1):
+            return HttpResponseForbidden("Câu hỏi hoặc thời lượng ghi âm không hợp lệ.")
+        if not attempt.answers.filter(question_index=index).exists():
+            ExamAnswer.objects.create(
+                attempt=attempt, question_index=index, audio=form.cleaned_data["audio"],
+                audio_extension=form.cleaned_data["audio_extension"], content_type=form.cleaned_data["audio_mime"],
+                duration_seconds=form.cleaned_data["duration_seconds"],
+            )
+            messages.success(request, f"Đã lưu bản ghi câu {index}.")
+    else:
+        messages.error(request, "Không lưu được bản ghi: " + "; ".join(error for errors in form.errors.values() for error in errors))
+    return redirect("exam_detail", attempt_id=attempt.pk)
+
+
+@role_required(ROLE_STUDENT)
+def exam_submit(request, attempt_id):
+    if request.method != "POST":
+        return HttpResponseForbidden("Nộp bài cần POST.")
+    attempt = get_object_or_404(ExamAttempt, pk=attempt_id, student=request.user)
+    if attempt.status != ExamAttempt.Status.IN_PROGRESS:
+        return HttpResponseForbidden("Bài thi đã nộp.")
+    if attempt.expires_at and timezone.now() > attempt.expires_at:
+        attempt.status = ExamAttempt.Status.SUBMITTED
+        attempt.scoring_status = ExamAttempt.ScoringStatus.NEEDS_REVIEW
+        attempt.submitted_at = timezone.now()
+        attempt.save(update_fields=("status", "scoring_status", "submitted_at"))
+        messages.error(request, "Thời gian bài thi đã hết; bài đã được khóa.")
+        return redirect("exam_detail", attempt_id=attempt.pk)
+    if attempt.answers.count() != len(attempt.questions_snapshot):
+        messages.error(request, "Hãy lưu bản ghi cho tất cả câu hỏi trước khi nộp bài.")
+        return redirect("exam_detail", attempt_id=attempt.pk)
+    attempt.status = ExamAttempt.Status.SUBMITTED
+    attempt.scoring_status = ExamAttempt.ScoringStatus.NEEDS_REVIEW
+    attempt.submitted_at = timezone.now()
+    attempt.save(update_fields=("status", "scoring_status", "submitted_at"))
+    messages.success(request, "Đã khóa bài thi. Bài đang chờ chấm và rà soát.")
+    return redirect("exam_detail", attempt_id=attempt.pk)
+
+
+@login_required
+def exam_answer_audio(request, answer_id):
+    answer = get_object_or_404(ExamAnswer.objects.select_related("attempt"), pk=answer_id)
+    allowed = answer.attempt.student_id == request.user.pk or is_content_admin(request.user) or CourseTeachingAssignment.objects.filter(
+        course=answer.attempt.course, teacher=request.user, is_active=True,
+    ).exists()
+    if not allowed:
+        return HttpResponseForbidden("Không có quyền nghe bản ghi thi.")
+    return FileResponse(answer.audio.open("rb"), content_type=answer.content_type)
+
+
+@login_required
+def exam_review_queue(request):
+    if not (is_content_admin(request.user) or request.user.groups.filter(name=ROLE_TEACHER).exists()):
+        return HttpResponseForbidden("Chức năng này dành cho giảng viên và quản trị viên.")
+    attempts = ExamAttempt.objects.filter(
+        status=ExamAttempt.Status.SUBMITTED,
+    ).exclude(scoring_status=ExamAttempt.ScoringStatus.FINAL).select_related(
+        "course", "student", "blueprint_version", "reviewed_by",
+    ).order_by("submitted_at", "id")
+    if not is_content_admin(request.user):
+        attempts = attempts.filter(course__teaching_assignments__teacher=request.user, course__teaching_assignments__is_active=True)
+    return render(request, "core/exam_review_queue.html", {"attempts": attempts, "claim_form": ExamClaimForm()})
+
+
+@login_required
+def exam_review_claim(request, attempt_id):
+    if request.method != "POST":
+        return HttpResponseForbidden("Claim attempt cần POST.")
+    if not (is_content_admin(request.user) or request.user.groups.filter(name=ROLE_TEACHER).exists()):
+        return HttpResponseForbidden("Chức năng này dành cho giảng viên và quản trị viên.")
+    queryset = ExamAttempt.objects.select_for_update()
+    if not is_content_admin(request.user):
+        queryset = queryset.filter(course__teaching_assignments__teacher=request.user, course__teaching_assignments__is_active=True)
+    with transaction.atomic():
+        attempt = get_object_or_404(queryset, pk=attempt_id, status=ExamAttempt.Status.SUBMITTED)
+        if attempt.reviewed_by_id and attempt.reviewed_by_id != request.user.pk:
+            messages.error(request, "Attempt này đã được giảng viên khác nhận chấm.")
+        else:
+            attempt.reviewed_by = request.user
+            attempt.save(update_fields=("reviewed_by",))
+            messages.success(request, "Đã nhận attempt để chấm.")
+    return redirect("exam_review_queue")
+
+
+@login_required
+def exam_review(request, attempt_id):
+    if not (is_content_admin(request.user) or request.user.groups.filter(name=ROLE_TEACHER).exists()):
+        return HttpResponseForbidden("Chức năng này dành cho giảng viên và quản trị viên.")
+    attempts = ExamAttempt.objects.select_related("course", "student").prefetch_related("answers")
+    if not is_content_admin(request.user):
+        attempts = attempts.filter(course__teaching_assignments__teacher=request.user, course__teaching_assignments__is_active=True)
+    attempt = get_object_or_404(attempts, pk=attempt_id)
+    form = ExamScoreForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        try:
+            with transaction.atomic():
+                result = score_official_attempt(attempt=attempt, answers_payload=form.cleaned_data["score_payload"], actor=request.user, reason=form.cleaned_data["reason"])
+                ExamScoreDecision.objects.create(
+                    attempt=attempt, actor=request.user, decision=result["status"], score=attempt.final_score,
+                    payload=result, reason=form.cleaned_data["reason"].strip(),
+                )
+        except ValidationError as exc:
+            form.add_error(None, exc)
+        else:
+            return redirect("exam_review", attempt_id=attempt.pk)
+    return render(request, "core/exam_review.html", {"attempt": attempt, "form": form})

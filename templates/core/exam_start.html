@@ -1,0 +1,9 @@
+{% extends "core/base.html" %}
+{% block title %}Bắt đầu kỳ thi{% endblock %}
+{% block content %}
+<section class="page-shell">
+  <h1>{{ version.title }}</h1>
+  <p class="lede">{{ version.blueprint.course.name }} · phiên bản {{ version.version }}</p>
+  <form method="post" class="stack-form">{% csrf_token %}{{ form.as_p }}<button class="button button-primary" type="submit">Cấp đề và bắt đầu</button></form>
+</section>
+{% endblock %}

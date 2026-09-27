@@ -2,14 +2,71 @@ from decimal import Decimal, InvalidOperation
 import re
 
 from django import forms
+from django.contrib.auth import get_user_model
+from django.contrib.auth.password_validation import validate_password
 
 from core.models import Course, QuestionTag, QuestionVersion
 from core.models import (
-    CEFR_LEVELS, CEFR_ORDER, BlueprintVersion, RubricVersion,
+    CEFR_LEVELS, CEFR_ORDER, RUBRIC_BANDS, RUBRIC_SIGNAL_VALUES,
+    BlueprintVersion, RubricVersion,
 )
 
 
 COURSE_LEVELS = {"1": ("A1", "A2"), "2": ("A2", "B1"), "3": ("B1", "B2"), "4": ("B2", "C1")}
+DEMO_ACCOUNT_ROLES = (
+    ("student", "Sinh viên"),
+    ("teacher", "Giảng viên"),
+    ("admin", "Quản trị viên"),
+)
+
+
+class DemoAccountForm(forms.Form):
+    username = forms.RegexField(
+        regex=r"^demo-[\w.@+-]+$", max_length=150, label="Tên đăng nhập",
+        error_messages={"invalid": "Tên đăng nhập phải bắt đầu bằng demo-."},
+    )
+    email = forms.EmailField(label="Email")
+    role = forms.ChoiceField(choices=DEMO_ACCOUNT_ROLES, label="Vai trò")
+    is_active = forms.BooleanField(required=False, initial=True, label="Tài khoản đang hoạt động")
+    password = forms.CharField(
+        required=False, label="Mật khẩu", widget=forms.PasswordInput(render_value=False),
+        help_text="Bắt buộc khi tạo; để trống khi sửa để giữ mật khẩu hiện tại.",
+    )
+
+    def __init__(self, *args, instance=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.instance = instance
+        if instance:
+            self.initial.update({
+                "username": instance.username,
+                "email": instance.email,
+                "is_active": instance.is_active,
+            })
+            self.initial["role"] = instance.groups.filter(name__in=[r[0] for r in DEMO_ACCOUNT_ROLES]).values_list("name", flat=True).first() or "student"
+        if instance:
+            self.fields["username"].disabled = True
+
+    def clean_username(self):
+        username = self.cleaned_data["username"].strip()
+        users = get_user_model().objects.filter(username__iexact=username)
+        if self.instance:
+            users = users.exclude(pk=self.instance.pk)
+        if users.exists():
+            raise forms.ValidationError("Tên đăng nhập này đã được sử dụng.")
+        return username
+
+    def clean(self):
+        cleaned = super().clean()
+        password = cleaned.get("password")
+        if not self.instance and not password:
+            self.add_error("password", "Hãy nhập mật khẩu cho tài khoản mới.")
+        elif password:
+            user = get_user_model()(username=cleaned.get("username", ""), email=cleaned.get("email", ""))
+            try:
+                validate_password(password, user=user)
+            except forms.ValidationError as exc:
+                self.add_error("password", exc)
+        return cleaned
 
 
 class PracticeCreateForm(forms.Form):
@@ -79,6 +136,28 @@ class PracticeReviewForm(forms.Form):
     feedback = forms.CharField(max_length=4000, required=False, label="Nhận xét của giảng viên", widget=forms.Textarea)
 
 
+class ExamStartForm(forms.Form):
+    topic = forms.CharField(max_length=160, required=False, label="Nhóm chủ đề")
+    seed = forms.IntegerField(required=False, min_value=0, max_value=(2**63) - 1)
+
+
+class ExamScoreForm(forms.Form):
+    score_payload = forms.JSONField(widget=forms.Textarea(attrs={"rows": 18, "spellcheck": "false"}))
+    reason = forms.CharField(max_length=2000, label="Lý do quyết định")
+
+
+class QuestionImportForm(forms.Form):
+    payload = forms.JSONField(
+        widget=forms.Textarea(attrs={"rows": 24, "spellcheck": "false"}),
+        label="Danh sách câu hỏi JSON",
+        help_text="Mỗi phần tử cần language, task_type, topic, prompt_text, target_level_min/max, prep_seconds, response_seconds, source_reference và exam_metadata.",
+    )
+
+
+class ExamClaimForm(forms.Form):
+    attempt_id = forms.IntegerField(min_value=1, widget=forms.HiddenInput)
+
+
 class QuestionVersionForm(forms.ModelForm):
     class Meta:
         model = QuestionVersion
@@ -86,7 +165,7 @@ class QuestionVersionForm(forms.ModelForm):
             "language", "task_type", "topic", "target_level_min", "target_level_max",
             "prompt_text", "candidate_instructions", "prep_seconds", "response_seconds",
             "required_points", "optional_prompts", "allowed_alternatives", "criterion_refs",
-            "source_reference", "source_notes", "tags",
+            "source_reference", "source_notes", "exam_metadata", "tags",
         )
         widgets = {
             "prompt_text": forms.Textarea(attrs={"rows": 4}),
@@ -96,6 +175,7 @@ class QuestionVersionForm(forms.ModelForm):
             "allowed_alternatives": forms.Textarea(attrs={"rows": 3}),
             "criterion_refs": forms.Textarea(attrs={"rows": 3}),
             "source_notes": forms.Textarea(attrs={"rows": 3}),
+            "exam_metadata": forms.Textarea(attrs={"rows": 6, "spellcheck": "false"}),
         }
         help_texts = {
             "required_points": "Nhập danh sách JSON; chỉ dùng nội dung đã đối chiếu tài liệu môn.",
@@ -103,6 +183,7 @@ class QuestionVersionForm(forms.ModelForm):
             "allowed_alternatives": "Danh sách JSON, có thể để trống.",
             "criterion_refs": "Danh sách mã tiêu chí rubric đã được duyệt; không tự tạo rubric.",
             "source_reference": "Tên/mã tài liệu và vị trí nguồn để truy nguyên.",
+            "exam_metadata": "Object JSON dùng để sampler lọc content_family, phoneme_targets, sentence_type, syllable_group và độ dài.",
         }
 
     def __init__(self, *args, **kwargs):
@@ -116,9 +197,9 @@ class RubricVersionForm(forms.ModelForm):
         label="Tiêu chí và descriptor theo cấp độ",
         widget=forms.Textarea(attrs={"rows": 18, "spellcheck": "false"}),
         help_text=(
-            'JSON dạng [{"name":"...","description":"...","max_points":null,'
-            '"descriptors":[{"level":"A1","text":"..."}]}]. '
-            "Chỉ nhập nội dung đã đối chiếu nguồn môn học; không tự đặt trọng số/ngưỡng."
+            'JSON dạng [{"name":"...","description":"...","weight":20,'
+            '"signal":"audio","descriptors":[{"level":"0","text":"..."}, ...]}]. '
+            "Descriptor phải đủ band 0–4; tổng weight phải bằng 100."
         ),
     )
 
@@ -137,7 +218,7 @@ class RubricVersionForm(forms.ModelForm):
 
     def clean_criteria_payload(self):
         criteria = self.cleaned_data["criteria_payload"]
-        valid_levels = {level for level, _ in CEFR_LEVELS}
+        valid_levels = {level for level, _ in RUBRIC_BANDS}
         if not isinstance(criteria, list) or not criteria:
             raise forms.ValidationError("Thêm ít nhất một tiêu chí dạng danh sách JSON.")
         names = set()
@@ -148,10 +229,19 @@ class RubricVersionForm(forms.ModelForm):
             if name.casefold() in names:
                 raise forms.ValidationError(f"Tên tiêu chí bị lặp: {name}.")
             names.add(name.casefold())
-            if set(item) - {"name", "description", "max_points", "descriptors"}:
+            if set(item) - {"name", "description", "weight", "signal", "bands", "max_points", "descriptors"}:
                 raise forms.ValidationError(f"Tiêu chí {index}: có thuộc tính không được hỗ trợ.")
             if not isinstance(item.get("description", ""), str):
                 raise forms.ValidationError(f"Tiêu chí {index}: description phải là văn bản.")
+            weight = item.get("weight")
+            try:
+                parsed_weight = Decimal(str(weight))
+            except (InvalidOperation, ValueError):
+                raise forms.ValidationError(f"Tiêu chí {index}: weight phải là số trong khoảng 0–100.")
+            if not parsed_weight.is_finite() or parsed_weight <= 0 or parsed_weight > 100:
+                raise forms.ValidationError(f"Tiêu chí {index}: weight phải là số trong khoảng 0–100.")
+            if item.get("signal") not in RUBRIC_SIGNAL_VALUES:
+                raise forms.ValidationError(f"Tiêu chí {index}: signal không hợp lệ.")
             points = item.get("max_points")
             if points is not None:
                 try:
@@ -173,6 +263,9 @@ class RubricVersionForm(forms.ModelForm):
                 if level in used_levels:
                     raise forms.ValidationError(f"Tiêu chí {index}: level {level} bị lặp.")
                 used_levels.add(level)
+        total_weight = sum((Decimal(str(item["weight"])) for item in criteria), Decimal("0"))
+        if total_weight != Decimal("100"):
+            raise forms.ValidationError("Tổng weight của các tiêu chí phải bằng 100.")
         return criteria
 
 
@@ -182,13 +275,13 @@ class BlueprintVersionForm(forms.ModelForm):
         widget=forms.Textarea(attrs={"rows": 20, "spellcheck": "false"}),
         help_text=(
             'JSON list với section_name, task_type, question_count, target_level_min/max, '
-            'language, prep_seconds (null nếu dùng thời gian riêng từng câu), response_seconds, rubric_version_id.'
+            'language, prep_seconds, response_seconds, selection_rules (object), rubric_version_id.'
         ),
     )
 
     class Meta:
         model = BlueprintVersion
-        fields = ("title", "source_reference", "source_notes")
+        fields = ("title", "source_reference", "source_notes", "assessment_type", "pass_threshold")
         widgets = {"source_notes": forms.Textarea(attrs={"rows": 3})}
 
     def __init__(self, *args, rubric_queryset=None, **kwargs):
@@ -205,6 +298,8 @@ class BlueprintVersionForm(forms.ModelForm):
                     "language": slot["language"],
                     "prep_seconds": slot["prep_seconds"],
                     "response_seconds": slot["response_seconds"],
+                    "selection_rules": slot["selection_rules"],
+                    "max_points": slot["max_points"],
                     "rubric_version_id": slot["rubric_version_id"],
                 }
                 for slot in self.instance.content_snapshot()["slots"]
@@ -217,11 +312,12 @@ class BlueprintVersionForm(forms.ModelForm):
             "section_name", "task_type", "question_count", "target_level_min", "target_level_max",
             "language", "prep_seconds", "response_seconds", "rubric_version_id",
         }
+        allowed = required | {"selection_rules", "max_points"}
         if not isinstance(slots, list) or not slots:
             raise forms.ValidationError("Blueprint cần ít nhất một slot dạng JSON list.")
         sections = set()
         for index, slot in enumerate(slots, start=1):
-            if not isinstance(slot, dict) or set(slot) != required:
+            if not isinstance(slot, dict) or not required.issubset(slot) or set(slot) - allowed:
                 raise forms.ValidationError(f"Slot {index}: các trường JSON chưa đúng cấu trúc.")
             for key, max_length in (("section_name", 120), ("task_type", 64), ("language", 16)):
                 value = slot[key]
@@ -248,6 +344,15 @@ class BlueprintVersionForm(forms.ModelForm):
                 isinstance(prep_seconds, bool) or not isinstance(prep_seconds, int) or prep_seconds < 0
             ):
                 raise forms.ValidationError(f"Slot {index}: prep_seconds phải là số nguyên không âm hoặc null.")
+            slot["selection_rules"] = slot.get("selection_rules") or {}
+            if not isinstance(slot["selection_rules"], dict):
+                raise forms.ValidationError(f"Slot {index}: selection_rules phải là object JSON.")
+            try:
+                slot["max_points"] = str(Decimal(str(slot.get("max_points", "1"))))
+                if Decimal(slot["max_points"]) <= 0:
+                    raise ValueError
+            except (InvalidOperation, ValueError):
+                raise forms.ValidationError(f"Slot {index}: max_points phải là số dương.")
             rubric_id = slot["rubric_version_id"]
             if isinstance(rubric_id, bool) or not isinstance(rubric_id, int) or rubric_id < 1:
                 raise forms.ValidationError(f"Slot {index}: rubric_version_id không hợp lệ.")

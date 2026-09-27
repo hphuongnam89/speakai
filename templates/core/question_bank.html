@@ -2,7 +2,45 @@
 {% block title %}Ngân hàng câu hỏi{% endblock %}
 {% block content %}
 <section class="dashboard-shell">
-  <div class="dashboard-heading"><div><p class="eyebrow">NGÂN HÀNG CÂU HỎI</p><h1>Câu hỏi theo học phần</h1><p class="lede">Chỉ bản đã được duyệt mới có thể dùng trong đề thi.</p></div><a class="button button-primary" href="{% url 'question_create' %}">Tạo câu hỏi</a></div>
-  {% if questions %}<div class="course-list">{% for question in questions %}<article class="course-card"><span class="course-number">{{ forloop.counter|stringformat:"02d" }}</span><div class="course-card-copy"><p class="course-kicker">{{ question.course.code }} · {{ question.versions.count }} phiên bản</p><h3><a href="{% url 'question_detail' question.pk %}">Câu hỏi #{{ question.pk }}</a></h3><p>{% for version in question.versions.all %}v{{ version.version }} · {{ version.get_status_display }}{% if not forloop.last %} / {% endif %}{% empty %}Chưa có nội dung{% endfor %}</p></div><a class="text-link" href="{% url 'question_detail' question.pk %}">Mở <span aria-hidden="true">↗</span></a></article>{% endfor %}</div>{% else %}<div class="note-panel"><span class="note-mark" aria-hidden="true">i</span><div><p class="eyebrow">CHƯA CÓ CÂU HỎI</p><h3>Ngân hàng bắt đầu trống.</h3><p>Chỉ nhập câu hỏi sau khi đối chiếu đề và đáp án/rubric nguồn của học phần.</p></div></div>{% endif %}
+  <div class="dashboard-heading question-bank-heading">
+    <div><p class="eyebrow">NGÂN HÀNG · CÂU HỎI</p><h1>Câu hỏi theo học phần</h1><p class="lede">Tìm, phân loại và theo dõi trạng thái duyệt câu hỏi.</p></div>
+    <div class="form-actions"><a class="button button-quiet" href="{% url 'question_import' %}">Nhập JSON</a><a class="button button-primary" href="{% url 'question_create' %}">Thêm câu hỏi</a></div>
+  </div>
+
+  <div class="question-stats" aria-label="Thống kê ngân hàng câu hỏi">
+    <div><span>Tổng phiên bản</span><strong>{{ total_count }}</strong></div>
+    <div><span>Bản nháp</span><strong>{{ counts.draft }}</strong></div>
+    <div><span>Chờ duyệt</span><strong>{{ counts.in_review }}</strong></div>
+    <div><span>Đã duyệt</span><strong>{{ counts.approved }}</strong></div>
+  </div>
+
+  <form method="get" class="question-filters" role="search">
+    <label class="question-search"><span class="sr-only">Tìm nội dung, chủ đề hoặc nguồn</span><input type="search" name="q" value="{{ search }}" placeholder="Tìm nội dung, chủ đề hoặc nguồn"></label>
+    <label><span class="sr-only">Học phần</span><select name="course"><option value="">Tất cả học phần</option>{% for course in courses %}<option value="{{ course.pk }}" {% if selected_course == course.pk|stringformat:"s" %}selected{% endif %}>{{ course.code }} · {{ course.name }}</option>{% endfor %}</select></label>
+    <label><span class="sr-only">Dạng câu hỏi</span><select name="task_type"><option value="">Tất cả dạng câu hỏi</option>{% for value,label in task_types %}<option value="{{ value }}" {% if selected_task_type == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
+    <label><span class="sr-only">Bậc năng lực</span><select name="level"><option value="">Tất cả bậc</option>{% for item in levels %}<option value="{{ item }}" {% if selected_level == item %}selected{% endif %}>{{ item }}</option>{% endfor %}</select></label>
+    <label><span class="sr-only">Trạng thái</span><select name="status"><option value="">Tất cả trạng thái</option>{% for value,label in status_choices %}<option value="{{ value }}" {% if selected_status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
+    <button class="button button-primary" type="submit">Lọc</button>
+    {% if search or selected_course or selected_task_type or selected_level or selected_status %}<a class="button button-quiet" href="{% url 'question_bank' %}">Xóa lọc</a>{% endif %}
+  </form>
+
+  <div class="question-list-heading"><strong>{{ page_obj.paginator.count }} phiên bản</strong><span>{% if page_obj.paginator.count %}Sắp xếp theo học phần{% else %}Không có kết quả phù hợp{% endif %}</span></div>
+  {% if versions %}
+    <div class="question-table-wrap"><table class="question-table"><thead><tr><th>Câu hỏi</th><th>Học phần</th><th>Dạng</th><th>Bậc</th><th>Chuẩn bị</th><th>Trả lời</th><th>Trạng thái</th><th></th></tr></thead><tbody>
+      {% for version in versions %}<tr>
+        <td class="question-prompt"><a href="{% url 'question_detail' version.question_id %}">{{ version.prompt_text|truncatechars:110 }}</a><small>{{ version.topic }} · v{{ version.version }}</small></td>
+        <td><span class="question-course-pill">{{ version.question.course.code }}</span></td>
+        <td>{{ version.task_type_label }}</td>
+        <td>{% if version.target_level_min %}{{ version.target_level_min }}{% if version.target_level_max != version.target_level_min %}–{{ version.target_level_max }}{% endif %}{% else %}—{% endif %}</td>
+        <td>{% if version.prep_seconds != None %}{{ version.prep_seconds }} giây{% else %}—{% endif %}</td>
+        <td>{% if version.response_seconds != None %}{{ version.response_seconds }} giây{% else %}—{% endif %}</td>
+        <td><span class="question-status status-{{ version.status }}">{{ version.status_label }}</span></td>
+        <td><a class="button button-quiet question-open" href="{% url 'question_detail' version.question_id %}">Mở</a></td>
+      </tr>{% endfor %}
+    </tbody></table></div>
+    {% if page_obj.paginator.num_pages > 1 %}<nav class="question-pagination" aria-label="Phân trang">{% if page_obj.has_previous %}<a href="?q={{ search|urlencode }}&course={{ selected_course }}&task_type={{ selected_task_type|urlencode }}&level={{ selected_level }}&status={{ selected_status }}&page={{ page_obj.previous_page_number }}">← Trước</a>{% endif %}<span>Trang {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>{% if page_obj.has_next %}<a href="?q={{ search|urlencode }}&course={{ selected_course }}&task_type={{ selected_task_type|urlencode }}&level={{ selected_level }}&status={{ selected_status }}&page={{ page_obj.next_page_number }}">Tiếp →</a>{% endif %}</nav>{% endif %}
+  {% else %}
+    <div class="question-empty"><span class="note-mark" aria-hidden="true">i</span><div><p class="eyebrow">{% if total_count %}KHÔNG CÓ KẾT QUẢ{% else %}NGÂN HÀNG TRỐNG{% endif %}</p><h2>{% if total_count %}Thử thay đổi bộ lọc{% else %}Chưa có câu hỏi trong học phần này{% endif %}</h2><p>{% if total_count %}Xóa một hoặc nhiều điều kiện để xem thêm câu hỏi.{% else %}Tạo câu hỏi từ tài liệu nguồn, sau đó gửi duyệt. Chỉ câu hỏi đã duyệt mới được dùng trong đề thi.{% endif %}</p>{% if not total_count %}<a class="button button-primary" href="{% url 'question_create' %}">Thêm câu hỏi đầu tiên</a>{% endif %}</div></div>
+  {% endif %}
 </section>
 {% endblock %}

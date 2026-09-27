@@ -16,10 +16,11 @@ from django.urls import reverse
 
 from core.models import (
     Course, CourseTeachingAssignment, Enrollment, Question, QuestionReview, QuestionTag, QuestionVersion,
-    BlueprintSlot, BlueprintVersion, CriterionLevelDescriptor, Enrollment, ExamBlueprint, PracticeAnswer,
-    PracticeAttempt, Rubric, RubricAuditEvent, RubricCriterion, RubricVersion,
+    BlueprintSlot, BlueprintVersion, CriterionLevelDescriptor, Enrollment, ExamBlueprint, ExamAnswer, ExamAttempt,
+    PracticeAnswer, PracticeAttempt, Rubric, RubricAuditEvent, RubricCriterion, RubricVersion,
 )
 from core.blueprints import InsufficientQuestionPool, sample_blueprint
+from core.official_scoring import score_official_attempt
 
 
 class PublicPageTests(TestCase):
@@ -385,6 +386,20 @@ class QuestionBankWorkflowTests(TestCase):
         csrf_client.force_login(self.teacher)
         self.assertEqual(csrf_client.post(reverse("question_create"), self.version_post()).status_code, 403)
 
+    def test_json_import_creates_drafts_with_exam_metadata(self):
+        self.client.force_login(self.teacher)
+        payload = [{
+            "language": "en", "task_type": "short_qa", "topic": "Daily life",
+            "target_level_min": "A1", "target_level_max": "A2", "prompt_text": "Describe your morning.",
+            "prep_seconds": 10, "response_seconds": 40, "source_reference": "GT1 source p. 12",
+            "exam_metadata": {"content_family": "topic-b", "sentence_type": "declarative", "phoneme_targets": ["/i:/"]},
+        }]
+        response = self.client.post(reverse("question_import"), {"course": self.course.pk, "payload": json.dumps(payload)})
+        self.assertRedirects(response, reverse("question_bank"))
+        version = QuestionVersion.objects.get()
+        self.assertEqual(version.status, QuestionVersion.Status.DRAFT)
+        self.assertEqual(version.exam_metadata["content_family"], "topic-b")
+
 
 class RubricWorkflowTests(TestCase):
     @classmethod
@@ -407,8 +422,10 @@ class RubricWorkflowTests(TestCase):
         return [{
             "name": "Tiêu chí kiểm thử",
             "description": "Mô tả được cung cấp bởi giảng viên.",
+            "weight": "100",
+            "signal": "llm",
             "max_points": max_points,
-            "descriptors": [{"level": "A1", "text": descriptor}, {"level": "A2", "text": "Mô tả A2."}],
+            "descriptors": [{"level": str(level), "text": descriptor if level == 0 else f"Mô tả band {level}."} for level in range(5)],
         }]
 
     def rubric_post(self, course=None, criteria=None, **extra):
@@ -439,7 +456,7 @@ class RubricWorkflowTests(TestCase):
         self.assertEqual(version.status, RubricVersion.Status.DRAFT)
         criterion = version.criteria.get()
         self.assertEqual(str(criterion.max_points), "2.50")
-        self.assertEqual(criterion.descriptors.count(), 2)
+        self.assertEqual(criterion.descriptors.count(), 5)
         self.assertEqual(version.audit_events.count(), 1)
         self.assertEqual(version.audit_events.first().action, RubricAuditEvent.Action.CREATED)
 
@@ -505,7 +522,7 @@ class RubricWorkflowTests(TestCase):
         self.assertFalse(Rubric.objects.exists())
 
         incomplete = self.criteria()
-        incomplete[0]["descriptors"] = [{"level": "A1", "text": "Chỉ có A1."}]
+        incomplete[0]["descriptors"] = [{"level": "0", "text": "Chỉ có band 0."}]
         rubric = self.create_rubric(criteria=incomplete)
         draft = rubric.versions.get()
         response = self.client.post(reverse("rubric_publish", args=[draft.pk]))
@@ -563,10 +580,10 @@ class BlueprintSamplingTests(TestCase):
             source_reference="Nguồn đáp án do giảng viên xác nhận",
         )
         criterion = RubricCriterion.objects.create(
-            rubric_version=self.rubric_version, position=1, name="Đáp ứng nhiệm vụ",
+            rubric_version=self.rubric_version, position=1, name="Đáp ứng nhiệm vụ", weight="100",
         )
-        for level in ("A1", "A2"):
-            CriterionLevelDescriptor.objects.create(criterion=criterion, level=level, text=f"Descriptor {level}")
+        for level in range(5):
+            CriterionLevelDescriptor.objects.create(criterion=criterion, level=str(level), text=f"Descriptor {level}")
         self.rubric_version.status = RubricVersion.Status.PUBLISHED
         from django.utils import timezone
         self.rubric_version.published_at = timezone.now()
@@ -595,6 +612,12 @@ class BlueprintSamplingTests(TestCase):
             version.status = status
             version.save()
         return version
+
+    def test_gt1_schema_rejects_missing_required_sections(self):
+        self.version.assessment_type = "gt1"
+        self.version.save(update_fields=("assessment_type",))
+        with self.assertRaises(ValidationError):
+            self.version.validate_for_publication()
 
     def test_sample_is_repeatable_and_snapshots_question_rubric_and_pool(self):
         question = self.add_question("Describe your day")
@@ -777,3 +800,120 @@ class PracticeWorkflowTests(TestCase):
         })
         self.assertEqual(response.status_code, 302)
         self.assertFalse(PracticeAnswer.objects.filter(attempt=attempt).exists())
+
+
+class OfficialExamWorkflowTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        User = get_user_model()
+        cls.student = User.objects.create_user(username="official-student", password="official-password-12345")
+        cls.teacher = User.objects.create_user(username="official-teacher", password="official-password-12345")
+        cls.student.groups.add(Group.objects.get_or_create(name="student")[0])
+        cls.teacher.groups.add(Group.objects.get_or_create(name="teacher")[0])
+        cls.course = Course.objects.create(code="OFGT1", name="Official GT1")
+        Enrollment.objects.create(student=cls.student, course=cls.course)
+        CourseTeachingAssignment.objects.create(teacher=cls.teacher, course=cls.course)
+
+    def setUp(self):
+        from django.utils import timezone
+        rubric = Rubric.objects.create(course=self.course, created_by=self.teacher)
+        self.rubric_version = RubricVersion.objects.create(
+            rubric=rubric, version=1, created_by=self.teacher, title="Official rubric",
+            section_name="A", task_type="solo", target_level_min="A1", target_level_max="A2",
+            source_reference="Official source",
+        )
+        criterion = RubricCriterion.objects.create(
+            rubric_version=self.rubric_version, position=1, name="task_achievement", weight="100", signal="manual",
+        )
+        for level in range(5):
+            CriterionLevelDescriptor.objects.create(criterion=criterion, level=str(level), text=f"Band {level}")
+        self.rubric_version.status = RubricVersion.Status.PUBLISHED
+        self.rubric_version.published_at = timezone.now()
+        self.rubric_version.save()
+        blueprint = ExamBlueprint.objects.create(course=self.course, created_by=self.teacher)
+        self.blueprint_version = BlueprintVersion.objects.create(
+            blueprint=blueprint, version=1, created_by=self.teacher, title="Official blueprint",
+            source_reference="Official blueprint source", pass_threshold="1.00",
+        )
+        BlueprintSlot.objects.create(
+            blueprint_version=self.blueprint_version, position=1, section_name="A", task_type="solo",
+            question_count=1, target_level_min="A1", target_level_max="A2", language="en",
+            prep_seconds=1, response_seconds=10, selection_rules={"topics": ["Daily life"]}, max_points="2.00",
+            rubric_version=self.rubric_version,
+        )
+        self.blueprint_version.status = BlueprintVersion.Status.PUBLISHED
+        self.blueprint_version.published_at = timezone.now()
+        self.blueprint_version.save()
+        question = Question.objects.create(course=self.course, created_by=self.teacher)
+        self.question_version = QuestionVersion.objects.create(
+            question=question, version=1, created_by=self.teacher, language="en", task_type="solo",
+            topic="Daily life", target_level_min="A1", target_level_max="A2", prompt_text="Describe your day.",
+            prep_seconds=1, response_seconds=10, source_reference="Approved official source",
+            exam_metadata={"content_family": "daily-1"},
+        )
+        self.question_version.status = QuestionVersion.Status.IN_REVIEW
+        self.question_version.save()
+        self.question_version.status = QuestionVersion.Status.APPROVED
+        self.question_version.save()
+
+    def complete_exam_preflight(self):
+        self.client.force_login(self.student)
+        response = self.client.post(reverse("exam_start", args=[self.blueprint_version.pk]), {"topic": "Daily life"})
+        self.assertRedirects(response, reverse("exam_preflight"))
+        setup = self.client.session[f"official_preflight:{self.student.pk}"]
+        response = self.client.post(reverse("exam_preflight_complete"), {
+            "nonce": setup["nonce"], "mic_verified": "1", "playback_confirmed": "1",
+            "speed_bps": 40_000, "latency_ms": 100,
+        })
+        self.assertEqual(response.status_code, 200)
+        return self.client.post(reverse("exam_preflight_begin"))
+
+    def test_official_start_requires_preflight_and_snapshots_with_timebox(self):
+        self.client.force_login(self.student)
+        response = self.client.post(reverse("exam_start", args=[self.blueprint_version.pk]), {"topic": "Daily life"})
+        self.assertRedirects(response, reverse("exam_preflight"))
+        self.assertFalse(ExamAttempt.objects.exists())
+        response = self.complete_exam_preflight()
+        attempt = ExamAttempt.objects.get()
+        self.assertRedirects(response, reverse("exam_detail", args=[attempt.pk]))
+        self.assertEqual(attempt.threshold, 1)
+        self.assertIsNotNone(attempt.started_at)
+        self.assertIsNotNone(attempt.expires_at)
+        self.assertEqual(attempt.questions_snapshot[0]["question"]["version_id"], self.question_version.pk)
+
+    def test_submit_requires_audio_and_scoring_sets_pass(self):
+        self.complete_exam_preflight()
+        attempt = ExamAttempt.objects.get()
+        wav = b"RIFF" + (36).to_bytes(4, "little") + b"WAVEfmt " + (16).to_bytes(4, "little") + (1).to_bytes(2, "little") + (1).to_bytes(2, "little") + (8000).to_bytes(4, "little") + (16000).to_bytes(4, "little") + (2).to_bytes(2, "little") + (16).to_bytes(2, "little") + b"data" + (0).to_bytes(4, "little")
+        blocked = self.client.post(reverse("exam_submit", args=[attempt.pk]))
+        self.assertRedirects(blocked, reverse("exam_detail", args=[attempt.pk]))
+        response = self.client.post(reverse("exam_answer_upload", args=[attempt.pk]), {
+            "question_index": 1, "duration_seconds": 1,
+            "audio": SimpleUploadedFile("answer.wav", wav, content_type="audio/wav"),
+        })
+        self.assertRedirects(response, reverse("exam_detail", args=[attempt.pk]))
+        self.assertEqual(ExamAnswer.objects.filter(attempt=attempt).count(), 1)
+        self.assertEqual(self.client.post(reverse("exam_submit", args=[attempt.pk])).status_code, 302)
+        attempt.refresh_from_db()
+        payload = [{"question_index": 1, "criteria": [{"name": "task_achievement", "band": 4, "evidence": "Đủ ý"}]}]
+        result = score_official_attempt(attempt=attempt, answers_payload=payload, actor=self.teacher, reason="Đã nghe lại audio.")
+        self.assertEqual(result["status"], "scored")
+        attempt.refresh_from_db()
+        self.assertEqual(attempt.final_score, 2)
+        self.assertTrue(attempt.passed)
+        with self.assertRaises(ValidationError):
+            score_official_attempt(attempt=attempt, answers_payload=payload, actor=self.teacher, reason="Chấm lại")
+
+    def test_review_queue_claims_submitted_attempt(self):
+        from django.utils import timezone
+        attempt = ExamAttempt.objects.create(
+            student=self.student, course=self.course, blueprint_version=self.blueprint_version, seed=1,
+            blueprint_snapshot=self.blueprint_version.content_snapshot(), questions_snapshot=[],
+            status=ExamAttempt.Status.SUBMITTED, submitted_at=timezone.now(),
+        )
+        self.client.force_login(self.teacher)
+        self.assertContains(self.client.get(reverse("exam_review_queue")), self.student.username)
+        response = self.client.post(reverse("exam_review_claim", args=[attempt.pk]))
+        self.assertRedirects(response, reverse("exam_review_queue"))
+        attempt.refresh_from_db()
+        self.assertEqual(attempt.reviewed_by_id, self.teacher.pk)

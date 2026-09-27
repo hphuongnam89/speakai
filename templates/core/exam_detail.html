@@ -1,0 +1,18 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Kỳ thi chính thức{% endblock %}
+{% block content %}
+<section class="page-shell">
+  <div class="practice-header"><div><p class="eyebrow">KỲ THI CHÍNH THỨC · {{ attempt.get_status_display|upper }}</p><h1>{{ attempt.course.name }}</h1><p class="lede">{{ items|length }} câu · snapshot blueprint v{{ attempt.blueprint_version.version }}</p></div></div>
+  <div class="practice-disclaimer message" role="note">Đề và rubric đã được khóa cho lượt thi này. Bản ghi sau khi nộp không thể thay đổi.</div>
+  {% for item in items %}
+  <article class="question-version practice-question">
+    <p class="eyebrow">CÂU {{ item.index }} / {{ items|length }}</p><h2>{{ item.question.prompt_text }}</h2>
+    {% if item.question.candidate_instructions %}<p>{{ item.question.candidate_instructions }}</p>{% endif %}
+    {% if item.answer %}<p class="state-pill">Đã lưu · {{ item.answer.duration_seconds }} giây</p><audio controls preload="none" src="{% url 'exam_answer_audio' item.answer.pk %}"></audio>
+    {% elif attempt.status == "in_progress" %}<form method="post" enctype="multipart/form-data" action="{% url 'exam_answer_upload' attempt.pk %}" class="audio-record-form"><input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"><input type="hidden" name="question_index" value="{{ item.index }}"><input type="hidden" name="duration_seconds" value="1"><input type="file" name="audio" accept="audio/*" required><button class="button button-secondary" type="submit">Lưu bản ghi</button></form>{% endif %}
+  </article>
+  {% endfor %}
+  {% if attempt.status == "in_progress" %}<form method="post" action="{% url 'exam_submit' attempt.pk %}">{% csrf_token %}<button class="button button-primary" type="submit"{% if saved_count != items|length %} disabled{% endif %}>Nộp và khóa bài</button> <span>{{ saved_count }}/{{ items|length }} câu đã lưu</span></form>{% else %}<p class="state-pill">Đã khóa bài lúc {{ attempt.submitted_at|date:"d/m/Y H:i" }} · {{ attempt.get_scoring_status_display }}</p>{% if attempt.final_score != None %}<section class="score-panel"><strong>{{ attempt.final_score }}</strong></section>{% endif %}{% endif %}
+</section>
+{% endblock %}

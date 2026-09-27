@@ -1,0 +1,24 @@
+{% extends "core/base.html" %}
+{% block title %}Tài khoản demo{% endblock %}
+{% block content %}
+<section class="dashboard-shell">
+  <div class="dashboard-heading">
+    <div><p class="eyebrow">QUẢN TRỊ · TÀI KHOẢN</p><h1>Tài khoản demo</h1><p class="lede">Danh sách tài khoản thực hành, vai trò và trạng thái đăng nhập.</p></div>
+    <a class="button button-primary" href="{% url 'demo_account_create' %}">Thêm tài khoản</a>
+  </div>
+  <section class="account-panel" aria-labelledby="account-list-title">
+    <div class="account-panel-heading"><div><h2 id="account-list-title">Danh sách tài khoản</h2><p>{{ accounts_total }} tài khoản demo</p></div></div>
+    <form method="get" class="account-filters" role="search">
+      <label class="account-search"><span class="sr-only">Tìm tên đăng nhập hoặc email</span><input type="search" name="q" value="{{ query }}" placeholder="Tìm tên đăng nhập hoặc email"></label>
+      <label><span class="sr-only">Lọc theo vai trò</span><select name="role"><option value="">Tất cả vai trò</option><option value="student"{% if selected_role == "student" %} selected{% endif %}>Sinh viên</option><option value="teacher"{% if selected_role == "teacher" %} selected{% endif %}>Giảng viên</option><option value="admin"{% if selected_role == "admin" %} selected{% endif %}>Quản trị viên</option></select></label>
+      <label><span class="sr-only">Lọc theo trạng thái</span><select name="status"><option value="">Tất cả trạng thái</option><option value="active"{% if selected_status == "active" %} selected{% endif %}>Hoạt động</option><option value="inactive"{% if selected_status == "inactive" %} selected{% endif %}>Đã khóa</option></select></label>
+      <button class="button button-secondary" type="submit">Lọc</button>
+    </form>
+    {% if accounts %}
+      <div class="account-table-wrap"><table class="account-table"><thead><tr><th>Tên đăng nhập</th><th>Email</th><th>Vai trò</th><th>Trạng thái</th><th>Đăng nhập gần nhất</th><th></th></tr></thead><tbody>
+        {% for account in accounts %}<tr><td><strong>{{ account.username }}</strong></td><td>{{ account.email|default:"—" }}</td><td><span class="role-pill">{{ account.role_label }}</span></td><td><span class="state-pill {% if account.is_active %}state-pending{% endif %}">{% if account.is_active %}Hoạt động{% else %}Đã khóa{% endif %}</span></td><td>{% if account.last_login %}{{ account.last_login|date:"H:i d/m/Y" }}{% else %}Chưa đăng nhập{% endif %}</td><td><a class="button button-quiet account-edit" href="{% url 'demo_account_edit' account.username %}">Sửa</a></td></tr>{% endfor %}
+      </tbody></table></div>
+    {% else %}<div class="empty-state"><h3>Không tìm thấy tài khoản</h3><p>Thử thay đổi điều kiện lọc hoặc tạo tài khoản demo mới.</p></div>{% endif %}
+  </section>
+</section>
+{% endblock %}
