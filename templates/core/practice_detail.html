@@ -3,30 +3,41 @@
 {% block title %}Bài luyện nói{% endblock %}
 {% block content %}
 <section class="page-shell">
-  <div class="practice-header"><div><p class="eyebrow">BÀI LUYỆN LOCAL AI · {{ attempt.get_status_display|upper }}</p><h1>{{ attempt.course.name }}</h1><p class="lede">{{ attempt.cefr_level }} · {{ attempt.topic }} · {{ attempt.question_count }} câu · {{ attempt.response_seconds }} giây/câu</p></div><a class="button button-quiet" href="{% url 'dashboard_student' %}">Thoát bài luyện</a></div>
+  <div class="practice-header"><div><p class="eyebrow">BÀI LUYỆN LOCAL AI · {{ attempt.get_status_display|upper }}</p><h1>{{ attempt.course.name }}</h1><p class="lede">{{ attempt.cefr_level }} · {{ attempt.topic }} · {{ attempt.question_count }} câu · {{ attempt.response_seconds }} giây/câu</p></div></a><button class="button button-quiet" href="{% url 'dashboard_student' %}"></</button></div>
   <div class="practice-disclaimer message" role="note">Câu hỏi do {{ attempt.ai_model }} tạo để luyện tập. AI chấm sơ bộ; điểm chỉ được công bố sau khi giảng viên duyệt.</div>
+  {% url 'practice_answer_upload' attempt.pk as upload_url %}
   {% for item in items %}
   <article class="question-version practice-question">
-    <p class="eyebrow">CÂU {{ item.index }} / {{ attempt.question_count }}</p>
-    <h2>{{ item.question.prompt }}</h2>
+    <p class="eyebrow">CÂU {{ item.index }} / {{ attempt.question_count }}</p><h2>{{ item.question.prompt }}</h2>
     {% if item.question.candidate_instructions %}<p>{{ item.question.candidate_instructions }}</p>{% endif %}
     {% if item.answer %}
       <p class="state-pill">Đã lưu · {{ item.answer.duration_seconds }} giây</p>
       <audio controls preload="none" src="{% url 'practice_answer_audio' item.answer.pk %}">Trình duyệt không hỗ trợ phát audio.</audio>
     {% elif attempt.status == "in_progress" %}
-      <form method="post" enctype="multipart/form-data" action="{% url 'practice_answer_upload' attempt.pk %}" class="audio-record-form" data-max-seconds="{{ attempt.response_seconds }}">
-        {% csrf_token %}<input type="hidden" name="question_index" value="{{ item.index }}"><input type="hidden" name="duration_seconds" value="0" data-duration>
-        <input type="file" name="audio" accept="audio/webm,audio/ogg,audio/wav,audio/mp4,audio/mpeg" required hidden data-audio-file>
-        <div class="record-controls"><button type="button" class="button button-primary" data-record-toggle aria-pressed="false">Bắt đầu ghi âm</button><span class="record-timer" data-record-timer role="timer" aria-live="polite">{{ attempt.response_seconds }} giây</span></div>
-        <audio controls hidden data-preview></audio><button class="button button-secondary" type="submit" disabled data-upload>Lưu câu trả lời</button>
-        <p class="helper-text" role="status" aria-live="polite" data-record-status>Cho phép trình duyệt truy cập micro khi được hỏi. Bắt đầu ghi âm để mở nút lưu.</p>
-      </form>
+      {% include "core/partials/_audio_recorder.html" with form_action=upload_url max_seconds=attempt.response_seconds question_index=item.index %}
     {% endif %}
   </article>
   {% endfor %}
   {% if attempt.status == "in_progress" %}
-    <form method="post" action="{% url 'practice_submit' attempt.pk %}" class="submit-practice-form">{% csrf_token %}<button class="button" type="submit"{% if saved_count != attempt.question_count %} disabled{% endif %}>Nộp bài luyện</button><span>{{ saved_count }}/{{ attempt.question_count }} câu đã lưu</span></form>
-  {% else %}<p class="state-pill">Đã nộp lúc {{ attempt.submitted_at|date:"d/m/Y H:i" }} · {{ attempt.get_scoring_status_display }}.</p>{% if attempt.scoring_status == "final" %}<section class="score-panel" aria-label="Kết quả bài luyện"><p class="eyebrow">ĐIỂM CUỐI</p><strong>{{ attempt.final_score }}/100</strong>{% if attempt.final_feedback %}<p>{{ attempt.final_feedback }}</p>{% endif %}</section>{% elif attempt.scoring_status == "ai_draft" %}<section class="score-panel" aria-label="Feedback AI tham khảo"><p class="eyebrow">FEEDBACK AI THAM KHẢO</p><strong>{{ attempt.ai_score }}/100</strong><p>{{ attempt.ai_result.feedback }}</p>{% for review in attempt.ai_result.per_question %}<article class="answer-feedback"><div class="answer-feedback-heading"><h3>Câu {{ review.question_index }} · {{ review.score }}/100</h3></div>{% if review.strengths %}<h4>Ưu điểm</h4><ul>{% for item in review.strengths %}<li>{{ item }}</li>{% endfor %}</ul>{% endif %}{% if review.weaknesses %}<h4>Cần cải thiện</h4><ul>{% for item in review.weaknesses %}<li>{{ item }}</li>{% endfor %}</ul>{% endif %}<p>{{ review.feedback }}</p><div class="criteria-feedback">{% for criterion in review.criteria %}<div><strong>{{ criterion.label }}</strong>{% if criterion.score != None %}<span>{{ criterion.score }}/100</span>{% else %}<span>Chưa đánh giá</span>{% endif %}{% if criterion.evidence %}<p>{{ criterion.evidence }}</p>{% endif %}</div>{% endfor %}</div></article>{% endfor %}<small>Điểm này giúp bạn tự cải thiện; giảng viên vẫn sẽ nghe lại và duyệt điểm cuối.</small></section>{% elif attempt.scoring_status == "failed" %}<section class="score-panel" aria-label="Trạng thái chấm điểm"><p>AI chưa chấm được bài này. Giảng viên vẫn có thể nghe audio và chấm thủ công.</p></section>{% endif %}{% endif %}
+    <form method="post" action="{% url 'practice_submit' attempt.pk %}" class="submit-practice-form">{% csrf_token %}
+      <button class="button" type="submit"{% if saved_count != attempt.question_count %} disabled{% endif %}>Nộp bài luyện</button>
+      <span>{{ saved_count }}/{{ attempt.question_count }} câu đã lưu</span>
+    </form>
+  {% else %}
+    <p class="state-pill">Đã nộp lúc {{ attempt.submitted_at|date:"d/m/Y H:i" }} · {{ attempt.get_scoring_status_display }}.</p>
+    {% if attempt.scoring_status == "final" %}
+      <section class="score-panel" aria-label="Kết quả bài luyện">
+        <p class="eyebrow">ĐIỂM CUỐI</p>
+        <strong>{{ attempt.final_score }}/100</strong>
+        {% if attempt.final_feedback %}
+          <p>{{ attempt.final_feedback }}</p>
+        {% endif %}
+      <section>
+    {% elif attempt.scoring_status == "ai_draft" %}
+      ...
+    {% endif %}
+  {% endif %}
 </section>
 {% endblock %}
-{% block extra_scripts %}<script src="{% static 'practice.js' %}?v=record-ui-2-20260926" defer></script>{% endblock %}
+<script src="{% static 'recorder.js' %}" defer></script>
+<script src="{% static 'practice.js' %}?v=record-ui-2-20260926" defer></script>

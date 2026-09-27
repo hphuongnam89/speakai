@@ -1,42 +1,6 @@
 const preflight = document.querySelector("#device-preflight");
 
-const createWavRecorder = (stream) => {
-  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-  const context = new AudioContextClass();
-  const source = context.createMediaStreamSource(stream);
-  const processor = context.createScriptProcessor(4096, 1, 1);
-  const samples = [];
-  processor.onaudioprocess = (event) => {
-    samples.push(new Float32Array(event.inputBuffer.getChannelData(0)));
-    event.outputBuffer.getChannelData(0).fill(0);
-  };
-  source.connect(processor);
-  processor.connect(context.destination);
-  return {
-    stop: async () => {
-      const sampleRate = context.sampleRate;
-      processor.disconnect();
-      source.disconnect();
-      await context.close();
-      const length = samples.reduce((total, sample) => total + sample.length, 0);
-      const buffer = new ArrayBuffer(44 + length * 2);
-      const view = new DataView(buffer);
-      const write = (offset, value) => [...value].forEach((char, index) => view.setUint8(offset + index, char.charCodeAt(0)));
-      write(0, "RIFF"); view.setUint32(4, 36 + length * 2, true); write(8, "WAVE");
-      write(12, "fmt "); view.setUint32(16, 16, true); view.setUint16(20, 1, true);
-      view.setUint16(22, 1, true); view.setUint32(24, sampleRate, true);
-      view.setUint32(28, sampleRate * 2, true); view.setUint16(32, 2, true);
-      view.setUint16(34, 16, true); write(36, "data"); view.setUint32(40, length * 2, true);
-      let offset = 44;
-      samples.forEach((sample) => sample.forEach((value) => {
-        const clamped = Math.max(-1, Math.min(1, value));
-        view.setInt16(offset, clamped < 0 ? clamped * 0x8000 : clamped * 0x7fff, true);
-        offset += 2;
-      }));
-      return new Blob([buffer], { type: "audio/wav" });
-    },
-  };
-};
+// createWavRecorder is defined in static/recorder.js
 
 if (preflight) {
   const micButton = preflight.querySelector("[data-mic-test]");

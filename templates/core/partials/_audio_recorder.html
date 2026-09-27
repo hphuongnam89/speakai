@@ -1,0 +1,14 @@
+<form method="post" enctype="multipart/form-data" action="{{ form_action }}" class="audio-record-form" data-max-seconds="{{ max_seconds }}">
+  {% csrf_token %}
+  <input type="hidden" name="question_index" value="{{ question_index }}">
+  <label class="sr-only">Câu {{ question_index }}</label>
+  <input type="hidden" name="duration_seconds" value="0" data-duration>
+  <input type="file" name="audio" accept="audio/webm,audio/ogg,audio/wav,audio/mp4,audio/mpeg" required hidden data-audio-file>
+  <div class="record-controls">
+    <button type="button" class="button button-primary" data-record-toggle aria-pressed="false">Bắt đầu ghi âm</button>
+    <span class="record-timer" data-record-timer role="timer" aria-live="polite"><span data-record-timer-text>{{ max_seconds }} giây</span></span>
+  </div>
+  <audio controls hidden data-preview></audio>
+  <button class="button button-secondary" type="submit" disabled data-upload>Lưu câu trả lời</button>
+  <p class="helper-text" role="status" aria-live="polite" data-record-status>Cho phép trình duyệt truy cập micro khi được hỏi. Bắt đầu ghi âm để mở nút lưu.</p>
+</form>
